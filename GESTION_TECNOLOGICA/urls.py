@@ -20,7 +20,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from INSTITUCIONES.views import *
-
+from django.urls import include, re_path
 admin.site.site_header = 'Administración Instituciones Tecnológicas'
 admin.site.index_title = 'Panel de control'
 admin.site.site_title = 'Administración Instituciones Tecnológicas'
@@ -34,5 +34,6 @@ urlpatterns = [
     path('instituciones_productivas/', view_home, name='instituciones_productivas'),
     path('mapa/', view_home, name='mapa'),
     path('contacto/', view_home, name='contacto'),
+    re_path(r'^chaining/', include('smart_selects.urls')),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)\
 +static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

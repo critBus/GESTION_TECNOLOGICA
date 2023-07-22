@@ -46,6 +46,8 @@ INSTALLED_APPS = [
 
     'nested_inline',
 
+    'smart_selects',
+
     'INSTITUCIONES'
 
 ]
@@ -150,3 +152,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 #CKEDITOR_BASEPATH =os.path.join(BASE_DIR, 'ckeditor/ckeditor/')
 CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"
+
+
+USE_DJANGO_JQUERY = True
