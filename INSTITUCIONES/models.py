@@ -69,7 +69,8 @@ class ImagenesFondo_Principal(models.Model):
         verbose_name_plural = 'Imágenes Fondo'
 
     Imagen = models.ImageField(upload_to='ImagenesFondo_Principal')
-    Pagina = models.ForeignKey(PaginaPrincipal, on_delete=models.CASCADE, related_name="pagina_principal_imagenesFondo")
+    Pagina = models.ForeignKey(PaginaPrincipal, on_delete=models.CASCADE
+                               , related_name="pagina_principal_imagenesFondo")
 
     def __str__(self):
         return "Imágen Fondo"
@@ -85,3 +86,29 @@ class Informacion_Principal(models.Model):
 
     def __str__(self):
         return  self.Titulo
+
+
+class TipoDeInstitucion(models.Model):
+    class Meta:
+        verbose_name = 'Tipo De Institución'
+        verbose_name_plural = 'Tipos De Instituciones'
+
+    Tipo = models.CharField(max_length=255,unique=True)
+
+    def __str__(self):
+        return  self.Tipo
+
+
+class InstitucionTecnologica(models.Model):
+    class Meta:
+        verbose_name = 'Institución Tecnológica'
+        verbose_name_plural = 'Instituciones Tecnológicas'
+
+    Nombre = models.CharField(max_length=255, unique=True)
+    NombreAbreviado  = models.CharField(max_length=255, unique=True)
+    Contacto = models.CharField(max_length=255)
+    Telefono = models.CharField(max_length=255)
+    Correo = models.EmailField(max_length=255)
+
+    def __str__(self):
+        return self.Tipo
