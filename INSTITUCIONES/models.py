@@ -98,22 +98,25 @@ class TipoDeInstitucion(models.Model):
     def __str__(self):
         return  self.Tipo
 
+class Provincia(models.Model):
+    class Meta:
+        verbose_name = 'Provincia'
+        verbose_name_plural = 'Provincias'
+
+    nombre = models.CharField(max_length=255)
+    def __str__(self):
+        return self.nombre
+
 class Municipio(models.Model):
     class Meta:
         verbose_name = 'Municipio'
         verbose_name_plural = 'Municipios'
     nombre = models.CharField(max_length=255)
+    provincia = models.ForeignKey(Provincia, on_delete=models.CASCADE)
     def __str__(self):
         return self.nombre
 
-class Provincia(models.Model):
-    class Meta:
-        verbose_name = 'Provincia'
-        verbose_name_plural = 'Provincias'
-    municipio = models.ForeignKey(Municipio, on_delete=models.CASCADE)
-    nombre = models.CharField(max_length=255)
-    def __str__(self):
-        return self.nombre
+
 
 class TipoDeInstitucionCientifica(models.Model):
     class Meta:
@@ -136,9 +139,14 @@ class Tecnologia(models.Model):
         verbose_name = 'Tecnología'
         verbose_name_plural = 'Tecnologías'
     nombre = models.CharField(max_length=255)
-    descripcion = models.TextField()
-    accionEsperada = models.CharField(max_length=255,verbose_name="Acción Esperada")
-    tipoDeTecnologia = models.ForeignKey(TipoDeTecnologia, on_delete=models.CASCADE)
+    Imagen = models.ImageField(upload_to='Tecnologias',blank=True,null=True)
+    accionEsperada = models.CharField(max_length=255, verbose_name="Acción Esperada")
+    tipoDeTecnologia = models.ForeignKey(TipoDeTecnologia
+                                         , on_delete=models.CASCADE
+                                         ,verbose_name="Tipo")
+    descripcion = models.TextField(verbose_name="Descripción")
+
+
     def __str__(self):
         return self.nombre
 
@@ -163,8 +171,10 @@ class InstitucionCientifica(models.Model):
         verbose_name = 'Institución Científica'
         verbose_name_plural = 'Instituciones Científicas'
 
+
     Nombre = models.CharField(max_length=255, unique=True)
     NombreAbreviado  = models.CharField(max_length=255, unique=True,verbose_name="Abreviado")
+    Imagen = models.ImageField(upload_to='InstitucionCientifica',blank=True,null=True)
     Contacto = models.CharField(max_length=255)
     Telefono = models.CharField(max_length=255)
     Correo = models.EmailField(max_length=255)
@@ -210,6 +220,7 @@ class InstitucionProductiva(models.Model):
 
     Nombre = models.CharField(max_length=255, unique=True)
     NombreAbreviado  = models.CharField(max_length=255, unique=True,verbose_name="Abreviado")
+    Imagen = models.ImageField(upload_to='InstitucionProductiva',blank=True,null=True)
     Contacto = models.CharField(max_length=255)
     Telefono = models.CharField(max_length=255)
     Correo = models.EmailField(max_length=255)
