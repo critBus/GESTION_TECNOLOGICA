@@ -35,5 +35,6 @@ urlpatterns = [
     path('mapa/', view_home, name='mapa'),
     path('contacto/', view_home, name='contacto'),
     re_path(r'^chaining/', include('smart_selects.urls')),
+    path('', include('core.urls', namespace='core')),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)\
 +static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

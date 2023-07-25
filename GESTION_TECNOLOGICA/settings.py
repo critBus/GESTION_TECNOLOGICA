@@ -48,6 +48,10 @@ INSTALLED_APPS = [
 
     'smart_selects',
 
+
+    'core',
+    'import_export',
+
     'INSTITUCIONES',
 
     'CONFIGURACION',
