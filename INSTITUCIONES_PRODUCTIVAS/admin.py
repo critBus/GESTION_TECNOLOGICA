@@ -20,6 +20,10 @@ from django import forms
 
 from django.contrib.admin.widgets import AdminFileWidget
 
+from import_export import resources
+from import_export.admin import ExportActionMixin, ImportExportActionModelAdmin
+from import_export.fields import Field
+
 from CONFIGURACION.admin import *
 from TECNOLOGIAS.admin import *
 
@@ -41,10 +45,21 @@ class ProductoInline(NestedStackedInline):#admin.TabularInline
     fk_name = 'institucionProductiva'
     formfield_overrides = STYLES_FORMFIELDS
 
-class InstitucionProductivaAdmin(admin.ModelAdmin):
+
+class InstitucionProductivaResource(resources.ModelResource):
+    class Meta:
+        model = InstitucionProductiva
+        fields = ('Nombre', 'NombreAbreviado')
+        export_order = ('Nombre', 'NombreAbreviado')
+
+
+from REPORTES.views import *
+class InstitucionProductivaAdmin(ImportExportActionModelAdmin):#admin.ModelAdmin
+    resource_class = InstitucionProductivaResource
     model = InstitucionProductiva
     formfield_overrides = STYLES_FORMFIELDS
     inlines = [ProductoInline]
+    actions = [REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.getAction()]
     def get_form(self, request, obj=None, change=False, **kwargs):
         forms=super(InstitucionProductivaAdmin,self).get_form(request,obj,change,**kwargs)
         forms.base_fields['provincia'].widget.can_add_related = False

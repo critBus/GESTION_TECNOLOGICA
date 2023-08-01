@@ -28,9 +28,11 @@ class TipoDeInstitucionCientificaAdmin(admin.ModelAdmin):
     formfield_overrides = STYLES_FORMFIELDS
 admin.site.register(TipoDeInstitucionCientifica,TipoDeInstitucionCientificaAdmin)
 
+from REPORTES.views import *
 class InstitucionCientificaAdmin(admin.ModelAdmin):
     model = InstitucionCientifica
     formfield_overrides = STYLES_FORMFIELDS
+    actions = [REPORTE_INSTITUCIONES_CIENTIFICA_PDF.getAction()]
     def get_form(self, request, obj=None, change=False, **kwargs):
         forms=super(InstitucionCientificaAdmin,self).get_form(request,obj,change,**kwargs)
         forms.base_fields['provincia'].widget.can_add_related = False

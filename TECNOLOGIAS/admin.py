@@ -32,9 +32,10 @@ class TipoDeTecnologiaAdmin(admin.ModelAdmin):
     formfield_overrides = STYLES_FORMFIELDS
 admin.site.register(TipoDeTecnologia,TipoDeTecnologiaAdmin)
 
-
+from REPORTES.views import *
 class TecnologiaAdmin(admin.ModelAdmin):
     model = Tecnologia
     formfield_overrides = STYLES_FORMFIELDS
+    actions = [REPORTE_TECNOLOGIAS_PDF.getAction()]
 admin.site.register(Tecnologia,TecnologiaAdmin)
 

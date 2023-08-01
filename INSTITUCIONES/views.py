@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .models import *
 # Create your views here.
 from GESTION_TECNOLOGICA.Utiles.LocalizacionDePagina import *
+from CONFIGURACION.models import *
 def view_home(request):
 
     config = ConfiguracionGeneral.get_solo()
