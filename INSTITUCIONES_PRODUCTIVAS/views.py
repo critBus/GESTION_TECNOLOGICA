@@ -3,6 +3,8 @@ from django.shortcuts import render
 from .models import *
 # Create your views here.
 import os
+from django.views import generic
+from GESTION_TECNOLOGICA.Utiles.LocalizacionDePagina import *
 def rellenar_instituciones_productivas(request):
     class LT:
         def __init__(self):
@@ -41,3 +43,53 @@ def rellenar_instituciones_productivas(request):
         p.save()
 
     return JsonResponse({'status': 'ok'}, status=200)
+
+class InstitucionProductiva_ListView(generic.ListView):
+    model = InstitucionProductiva
+    paginate_by=10
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        q = self.request.GET.get('q')
+        campo = self.request.GET.get('campo')
+        if q and campo:
+            q = q.strip()
+            if campo=='NombreAbreviado':
+                queryset = queryset.filter(NombreAbreviado__icontains=q)
+            elif campo=='Contacto':
+                queryset = queryset.filter(Contacto__icontains=q)
+            elif campo=='Telefono':
+                queryset = queryset.filter(Telefono__icontains=q)
+            elif campo=='Correo':
+                queryset = queryset.filter(Correo__icontains=q)
+            elif campo=='Provincia':
+                queryset = queryset.filter(provincia__nombre__icontains=q)
+            elif campo=='Municipio':
+                queryset = queryset.filter(municipio__nombre__icontains=q)
+            elif campo=='Tipo':
+                queryset = queryset.filter(tipoDeInstitucionProductiva__nombre__icontains=q)
+            elif campo=='Producto':
+                queryset = Producto.objects.filter(nombre__icontains=q)
+                queryset = InstitucionProductiva.objects.filter(producto__in=queryset)
+            else:
+                queryset = queryset.filter(Nombre__icontains=q)
+        return queryset
+    def get_context_data(self, *a, object_list=None, **kwargs):
+        context=super().get_context_data(*a,object_list=object_list,**kwargs)
+        config = ConfiguracionGeneral.get_solo()
+        lcp = LocalizacionDePagina("Instituciones","Lista", "Instituciones Productivas")
+        context['config']=config
+        context['lcp'] = lcp
+        context['urlPdf'] = '/reporte_institucion_productiva_pdf/'
+        return context
+
+
+class InstitucionProductiva_DetailView(generic.DetailView):
+    model = InstitucionProductiva
+    def get_context_data(self, *a, object_list=None, **kwargs):
+        context=super().get_context_data(*a,object_list=object_list,**kwargs)
+        config = ConfiguracionGeneral.get_solo()
+        lcp = LocalizacionDePagina("Instituciones","Detalles", "Institucion Productiva")
+        context['config']=config
+        context['lcp'] = lcp
+
+        return context

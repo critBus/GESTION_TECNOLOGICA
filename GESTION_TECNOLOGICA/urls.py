@@ -20,6 +20,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from INSTITUCIONES.views import *
+from INSTITUCIONES_PRODUCTIVAS.views import *
+from INSTITUCIONES_CIENTIFICAS.views import *
+from TECNOLOGIAS.views import *
 from django.urls import include, re_path
 admin.site.site_header = 'Administración Instituciones Tecnológicas'
 admin.site.index_title = 'Panel de control'
@@ -30,12 +33,21 @@ urlpatterns = [
     path('', view_home, name='home'),
     path('admin/', admin.site.urls),
     path('quienes_somos/', view_quienes_somos, name='quienes_somos'),
-    path('instituciones_tecnologicas/', view_home, name='instituciones_tecnologicas'),
-    path('instituciones_productivas/', view_home, name='instituciones_productivas'),
+    path('instituciones_tecnologicas/', InstitucionCientifica_ListView.as_view(), name='instituciones_tecnologicas'),
+    path('instituciones_tecnologicas/findById/<int:pk>', InstitucionCientifica_DetailView.as_view()),
+    path('instituciones_productivas/', InstitucionProductiva_ListView.as_view(), name='instituciones_productivas'),
+    path('instituciones_productivas/findById/<int:pk>', InstitucionProductiva_DetailView.as_view()),
+    path('Servicios/Tecnologias/lista', Tecnologia_ListView.as_view(), name='tecnologias'),
+    path('Servicios/Tecnologias/findById/<int:pk>', Tecnologia_DetailView.as_view()),
+    path('Servicios/Productos/lista', Tecnologia_ListView.as_view(), name='productos'),
+    path('Servicios/Productos/findById/<int:pk>', Tecnologia_DetailView.as_view()),
+    path('Servicios/Especies/lista', Especie_ListView.as_view(), name='especies'),
+    # path('Servicios/Especies/findById/<int:pk>', Tecnologia_DetailView.as_view()),
     path('mapa/', view_home, name='mapa'),
     path('contacto/', view_home, name='contacto'),
     re_path(r'^chaining/', include('smart_selects.urls')),
     path('', include('REPORTES.urls')),#, namespace='REPORTES'
     path('', include('INSTITUCIONES_PRODUCTIVAS.urls')),
+    path('', include('INSTITUCIONES_CIENTIFICAS.urls')),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)\
 +static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

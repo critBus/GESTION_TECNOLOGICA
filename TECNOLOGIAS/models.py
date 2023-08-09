@@ -22,6 +22,25 @@ class TipoDeTecnologia(models.Model):
     def __str__(self):
         return self.nombre
 
+class Especie(models.Model):
+    class Meta:
+        verbose_name = 'Especie'
+        verbose_name_plural = 'Especies'
+    nombreCientifico = models.CharField(max_length=255,verbose_name="Nombre Científico")
+    nombreComun = models.CharField(max_length=255,verbose_name="Nombre Común")
+    Imagen = models.ImageField(upload_to='Tecnologias', blank=True, null=True)
+    tipoDeEspecie = models.CharField(
+        max_length=10,
+        choices=[("animal","animal"),("vegetal","vegetal")],
+        default="animal",
+        verbose_name="Tipo"
+    )
+    descripcion = models.TextField(verbose_name="Descripción", blank=True, null=True)
+
+    #tecnologias = models.ManyToManyField(Tecnologia)
+    def __str__(self):
+        return self.nombreComun
+
 class Tecnologia(models.Model):
     class Meta:
         verbose_name = 'Tecnología'
@@ -32,24 +51,11 @@ class Tecnologia(models.Model):
     tipoDeTecnologia = models.ForeignKey(TipoDeTecnologia
                                          , on_delete=models.CASCADE
                                          ,verbose_name="Tipo")
+    especies = models.ManyToManyField(Especie, verbose_name="Especies")
     descripcion = models.TextField(verbose_name="Descripción")
 
 
     def __str__(self):
         return self.nombre
 
-class Especie(models.Model):
-    class Meta:
-        verbose_name = 'Especie'
-        verbose_name_plural = 'Especies'
-    nombreCientifico = models.CharField(max_length=255,verbose_name="Nombre Científico")
-    nombreComun = models.CharField(max_length=255,verbose_name="Nombre Común")
-    tipoDeTecnologia = models.CharField(
-        max_length=10,
-        choices=[("animal","animal"),("vegetal","vegetal")],
-        default="animal",
-    )
 
-    tecnologias = models.ManyToManyField(Tecnologia)
-    def __str__(self):
-        return self.nombreComun

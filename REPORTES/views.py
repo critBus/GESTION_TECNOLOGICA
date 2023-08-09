@@ -8,6 +8,7 @@ from reportlab.lib.pagesizes import letter,landscape,A4
 from reportlab.lib.units import mm,cm
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle,Paragraph
 from INSTITUCIONES_PRODUCTIVAS.models import *
+from INSTITUCIONES_CIENTIFICAS.models import *
 
 import io
 from reportlab.platypus import SimpleDocTemplate, Paragraph, TableStyle
@@ -24,11 +25,19 @@ class DatosColumnaReporte:
         self.header=""
         self.metodo_getValor=None#v->v.valor
         self.proporcion_comlumna=1
+        #self.metodo_filtrar_QCampo=None#q,campo->List
+
 
 class AdministradorDeReporte:
     def __init__(self):
         self.columnas:List[DatosColumnaReporte]=[]
         self.titulo=""
+        self.claseModelo = None
+        self.dic_campo_atributo = {}
+        self.dic_campo_metodo_filtrar = {}#q,campo->List
+    def setClaseModelo(self,claseModelo):
+        self.claseModelo =claseModelo
+        self.dic_campo_atributo={str(v):str(v) for v in vars(claseModelo)}
     def add(self,header,metodo_getValor,proporcion_comlumna=1):
         d=DatosColumnaReporte()
         d.header=header
@@ -94,6 +103,23 @@ class AdministradorDeReporte:
 
         metodoAction.short_description = "Exportar a PDF"
         return metodoAction
+    def getView(self):
+        def metodoView(request):
+            q = request.GET.get('q')
+            campo = request.GET.get('campo')
+            if q and campo:
+                q=q.strip()
+                if campo in self.dic_campo_metodo_filtrar:
+                    queryset=self.dic_campo_metodo_filtrar[campo](q,campo)
+                elif campo in self.dic_campo_atributo:
+                    valor=self.dic_campo_atributo[campo]
+                    filtro=str(valor+"__icontains")
+                    queryset = self.claseModelo.objects.filter(**{filtro:q})
+            else:
+                queryset = self.claseModelo.objects.all()
+            return self.getAction()(None,None,queryset)
+        return metodoView
+
 
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF=AdministradorDeReporte()
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.titulo="Instituciones Productivas"
@@ -107,6 +133,12 @@ REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.add('Municipio',lambda v:v.municipio.nombre
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.add('Direccion',lambda v:v.Direccion)
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.add('Institucion Productiva',lambda v:v.tipoDeInstitucionProductiva.nombre)
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.add('Refrigeracion',lambda v:v.capacidadDeRefrigeracion)
+REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.setClaseModelo(InstitucionProductiva)
+REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.dic_campo_atributo['Provincia']='provincia__nombre'
+REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.dic_campo_atributo['Municipio']='municipio__nombre'
+REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.dic_campo_atributo['Tipo']='tipoDeInstitucionProductiva__nombre'
+REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.dic_campo_metodo_filtrar['Producto']=lambda q,c:InstitucionProductiva.objects.filter(producto__in=Producto.objects.filter(nombre__icontains=q))
+
 
 
 
@@ -120,8 +152,14 @@ REPORTE_INSTITUCIONES_CIENTIFICA_PDF.add('Correo',lambda v:v.Correo)
 REPORTE_INSTITUCIONES_CIENTIFICA_PDF.add('Provincia',lambda v:v.provincia.nombre)
 REPORTE_INSTITUCIONES_CIENTIFICA_PDF.add('Municipio',lambda v:v.municipio.nombre)
 REPORTE_INSTITUCIONES_CIENTIFICA_PDF.add('Direccion',lambda v:v.Direccion)
-REPORTE_INSTITUCIONES_CIENTIFICA_PDF.add('Institucion Productiva',lambda v:v.tipoDeInstitucionCientifica.nombre)
-REPORTE_INSTITUCIONES_CIENTIFICA_PDF.add('Tecnologias',lambda v:",".join([z.nombre for z in v.tecnologias.all()]))
+REPORTE_INSTITUCIONES_CIENTIFICA_PDF.add('Institucion Científica',lambda v:v.tipoDeInstitucionCientifica.nombre)
+REPORTE_INSTITUCIONES_CIENTIFICA_PDF.add('Tecnologias',lambda v:"<br/>".join([z.nombre for z in v.tecnologias.all()]))
+REPORTE_INSTITUCIONES_CIENTIFICA_PDF.setClaseModelo(InstitucionCientifica)
+REPORTE_INSTITUCIONES_CIENTIFICA_PDF.dic_campo_atributo['Provincia']='provincia__nombre'
+REPORTE_INSTITUCIONES_CIENTIFICA_PDF.dic_campo_atributo['Municipio']='municipio__nombre'
+REPORTE_INSTITUCIONES_CIENTIFICA_PDF.dic_campo_atributo['Tipo']='tipoDeInstitucionCientifica__nombre'
+REPORTE_INSTITUCIONES_CIENTIFICA_PDF.dic_campo_atributo['Tecnologia']='tecnologias__nombre'
+#REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.dic_campo_metodo_filtrar['Tecnologia']=lambda q,c:InstitucionProductiva.objects.filter(producto__in=Tecnologia.objects.filter(nombre__icontains=q))
 
 
 REPORTE_TECNOLOGIAS_PDF=AdministradorDeReporte()
@@ -129,6 +167,25 @@ REPORTE_TECNOLOGIAS_PDF.titulo="Tecnologías"
 REPORTE_TECNOLOGIAS_PDF.add('Nombre',lambda v:v.nombre)
 REPORTE_TECNOLOGIAS_PDF.add('Accion',lambda v:v.accionEsperada)
 REPORTE_TECNOLOGIAS_PDF.add('Tipo',lambda v:v.tipoDeTecnologia.nombre)#lambda v:",".join([z.nombre for z in v.tipoDeTecnologia.all()]))
+REPORTE_TECNOLOGIAS_PDF.add('Especies',lambda v:"<br/>".join([z.nombreCientifico for z in v.especies.all()]))
+REPORTE_TECNOLOGIAS_PDF.setClaseModelo(Tecnologia)
+REPORTE_TECNOLOGIAS_PDF.dic_campo_atributo['Tipo']='tipoDeTecnologia__nombre'
+REPORTE_TECNOLOGIAS_PDF.dic_campo_atributo['especie_nombreComun']='especies__nombreComun'
+REPORTE_TECNOLOGIAS_PDF.dic_campo_atributo['especie_nombreCientifico']='especies__nombreCientifico'
+REPORTE_TECNOLOGIAS_PDF.dic_campo_atributo['especie_tipoDeEspecie']='especies__tipoDeEspecie__nombre'
+
+
+REPORTE_ESPECIES_PDF=AdministradorDeReporte()
+REPORTE_ESPECIES_PDF.titulo="Especies"
+REPORTE_ESPECIES_PDF.add('Nombre Común',lambda v:v.nombreComun)
+REPORTE_ESPECIES_PDF.add('Nombre Científico',lambda v:v.nombreCientifico)
+REPORTE_ESPECIES_PDF.add('Tipo',lambda v:v.tipoDeEspecie)#lambda v:",".join([z.nombre for z in v.tipoDeTecnologia.all()]))
+REPORTE_ESPECIES_PDF.setClaseModelo(Especie)
+# REPORTE_ESPECIES_PDF.dic_campo_atributo['Tipo']='tipoDeTecnologia__nombre'
+# REPORTE_ESPECIES_PDF.dic_campo_atributo['especie_nombreComun']='especies__nombreComun'
+# REPORTE_ESPECIES_PDF.dic_campo_atributo['especie_nombreCientifico']='especies__nombreCientifico'
+# REPORTE_ESPECIES_PDF.dic_campo_atributo['especie_tipoDeEspecie']='especies__tipoDeEspecie__nombre'
+
 
 
 #

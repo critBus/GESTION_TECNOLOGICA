@@ -59,6 +59,7 @@ class InstitucionProductiva(models.Model):
                                                     ,verbose_name="Tipo"
                                                     )
     capacidadDeRefrigeracion = models.FloatField(blank=True,verbose_name="Capacidad de refrigeración")
+    descripcion = models.TextField(verbose_name="Descripción",blank=True,null=True)
 
 
     def __str__(self):

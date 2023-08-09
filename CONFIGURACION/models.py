@@ -18,6 +18,7 @@ from django.forms import TextInput
 class ConfiguracionGeneral(SingletonModel):
     nombreSitio=models.CharField(max_length=20,verbose_name="Sitio",null=True)
     ImagenLogo = models.ImageField(upload_to='config')
+    ImagenBreadcrumbs = models.ImageField(upload_to='config')
     linkFacebook=models.CharField(max_length=255,verbose_name="Link Facebook",null=True)
     linkTwitter = models.CharField(max_length=255, verbose_name="Link Twitter",null=True)
     linkYoutube= models.CharField(max_length=255, verbose_name="Link Youtube",null=True)
@@ -25,7 +26,7 @@ class ConfiguracionGeneral(SingletonModel):
     telefono=models.CharField(max_length=8,null=True)#, widget=CustomTelefotoWidget
     direccion=models.CharField(max_length=255,verbose_name="Dirección",null=True)
     horarios = models.TextField()
-    ImagenBreadcrumbs = models.ImageField(upload_to='config')
+
 
 
 
@@ -66,8 +67,9 @@ class Informacion_Principal(models.Model):
         verbose_name_plural = 'Informaciones Principales'
     Pagina = models.ForeignKey(PaginaPrincipal, on_delete=models.CASCADE,related_name="pagina_principal_informacion")
     Titulo = models.CharField(max_length=255)
-    Descripcion = models.TextField()
     Imagen = models.ImageField(upload_to='Informacion_Principal')
+    Descripcion = models.TextField()
+
 
     def __str__(self):
         return  self.Titulo
@@ -88,8 +90,9 @@ class Municipio(models.Model):
     class Meta:
         verbose_name = 'Municipio'
         verbose_name_plural = 'Municipios'
-    nombre = models.CharField(max_length=255)
     provincia = models.ForeignKey(Provincia, on_delete=models.CASCADE)
+    nombre = models.CharField(max_length=255)
+
     def __str__(self):
         return self.nombre
 

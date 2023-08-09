@@ -31,6 +31,7 @@
 
   <!-- Template Main CSS File -->
   <link href="{% static 'plantillas/UpConstruction-1.0.0/assets/css/main.css' %}" rel="stylesheet">
+  <link href="{% static 'plantillas/UpConstruction-1.0.0/assets/css/extraR.css' %}" rel="stylesheet">
 
 {% block css_extra %}{% endblock %}
   <!-- =======================================================
@@ -60,8 +61,27 @@
         <ul>
           <li><a href="{% url 'home' %}" class="active">Principal</a></li>
           <li><a href="{% url 'quienes_somos' %}">Quienes Somos</a></li>
-          <li><a href="{% url 'instituciones_tecnologicas' %}">Instituciones Tecnológicas </a></li>
-          <li><a href="{% url 'instituciones_productivas' %}">Instituciones Productivas </a></li>
+
+          <li class="dropdown"><a href="#"><span>Instituciones</span> <i
+                class="bi bi-chevron-down dropdown-indicator"></i></a>
+            <ul>
+              <li><a href="{% url 'instituciones_tecnologicas' %}">Instituciones Tecnológicas </a></li>
+              <li><a href="{% url 'instituciones_productivas' %}">Instituciones Productivas </a></li>
+            </ul>
+          </li>
+          <li class="dropdown"><a href="#"><span>Servicios</span> <i
+                class="bi bi-chevron-down dropdown-indicator"></i></a>
+            <ul>
+              <li><a href="{% url 'productos' %}">Productos</a></li>
+              <li><a href="{% url 'tecnologias' %}">Tecnologías</a></li>
+              <li><a href="{% url 'especies' %}">Especies</a></li>
+
+
+            </ul>
+          </li>
+
+
+
           <li><a href="{% url 'mapa' %}">Mapa</a></li>
 
 
@@ -190,7 +210,7 @@
   <script src="{% static 'plantillas/UpConstruction-1.0.0/assets/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
   <script src="{% static 'plantillas/UpConstruction-1.0.0/assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
   <script src="{% static 'plantillas/UpConstruction-1.0.0/assets/vendor/purecounter/purecounter_vanilla.js' %}"></script>
-  <script src="{% static 'plantillas/UpConstruction-1.0.0/assets/vendor/php-email-form/validate.js' %}"></script>
+  <!--<script src="{% static 'plantillas/UpConstruction-1.0.0/assets/vendor/php-email-form/validate.js' %}"></script>-->
 
   <!-- Template Main JS File -->
   <script src="{% static 'plantillas/UpConstruction-1.0.0/assets/js/main.js' %}"></script>

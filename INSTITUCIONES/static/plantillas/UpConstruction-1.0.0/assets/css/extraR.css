@@ -1,0 +1,32 @@
+.bd_blanco{
+    background-color: white !important;
+}
+
+.bd_gris{
+    background-color: #f5f6f7 !important;
+}
+
+.btn_amarillo{
+    background: #feb900;
+    border: 0;
+    /*padding: 10px 35px;*/
+    color: #fff;
+    transition: 0.4s;
+    border-radius: 5px;
+}
+.btn_amarillo:hover {
+  background: rgba(254, 185, 0, 0.8);
+}
+
+.isDisable{
+    color:currentColor;
+    cursor: not-allowed;
+    opacity: 0.5;
+    text-decoration: none;
+    pointer-events: none;
+}
+.ul_sin_puntos{
+    list-style: none;
+    padding: 0;
+}
+/*#feb900*/

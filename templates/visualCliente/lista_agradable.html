@@ -1,0 +1,122 @@
+{% extends "visualCliente/padre_breadcrumbs.html" %}
+{% load static %}
+
+{% block titulo %}
+    Principal
+{% endblock %}
+
+
+
+{% block contenido %}
+
+<section>
+    <div class="container w-100 contact" data-aos="fade-up">
+
+<!-- -->
+    <div class="row php-email-form">
+        <div class="col-10 ">
+
+
+            <form method="get" class=" ">
+                {% csrf_token %}
+
+                    <div class="row gy-4">
+                        <div class="col-lg-10 form-group">
+
+                            <div class="input-group">
+                                <input type="text" name="q" class="form-control" style="width: 70%;" id="name" placeholder="Busqueda" required>
+                                <select name="campo" class="form-select">
+                                    {% block option_campos_select_filtros %}{% endblock%}
+
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-2 form-group d-flex justify-content-center">
+
+                            <button type="submit" class="btn"><i class="bi bi-search text-light"></i></button>
+                        </div>
+                    </div>
+
+
+
+            </form>
+
+
+        </div>
+        <div class="col-2">
+             <form method="get" action="{{urlPdf}}">
+                {% csrf_token %}
+                 {% if 'q' in request.GET and 'campo' in request.GET %}
+                <input type="hidden" name="campo" value="{{request.GET.campo}}">
+                 <input type="hidden" name="q" value="{{request.GET.q}}">
+                 {% endif %}
+                <button type="submit" class="btn" ><i class="bi bi-file-earmark-pdf-fill text-light"></i></button>
+            </form>
+        </div>
+
+<!--bi-filetype-pdf-->
+    </div>
+        </div>
+</section>
+
+
+    {% block contenido_lista %}{% endblock%}
+<!-- -->
+<section>
+    <div class="container">
+
+        <div class="row ">
+            <div class="col d-flex justify-content-center">
+                {% if is_paginated %}
+                <div class="pagination ">
+                    <span class="page-links">
+
+                        <a  class="btn btn_amarillo {% if not page_obj.has_previous %} isDisable {% endif %}"
+                            {% if page_obj.has_previous %}
+                                href="{{ request.path }}?page={{ page_obj.previous_page_number }}{% if 'q' in request.GET and 'campo' in request.GET %}&campo={{ request.GET.campo }}&q={{ request.GET.q }}{% endif %}"
+                            {% endif %}
+                        ><i class="bi bi-arrow-left text-light"></i>
+                        </a>
+
+                        <span class="page-current">
+                            Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
+                        </span>
+
+                        <a class="btn btn_amarillo {% if not page_obj.has_next %} isDisable {% endif %}"
+                           {% if page_obj.has_next %}
+                                href="{{ request.path }}?page={{ page_obj.next_page_number }}{% if 'q' in request.GET and 'campo' in request.GET %}&campo={{ request.GET.campo }}&q={{ request.GET.q }}{% endif %}"
+                            {% endif %}
+                        ><i class="bi bi-arrow-right text-light"></i>
+                        </a>
+
+
+
+                    </span>
+                </div>
+                {% endif %}
+            </div>
+
+
+
+        </div>
+
+    </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+{% endblock%}
+
+{% block scripts_extras %}
+
+
+{% endblock%}

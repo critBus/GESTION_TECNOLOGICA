@@ -1,0 +1,126 @@
+{% extends "visualCliente/lista_agradable.html" %}
+{% load static %}
+
+{% block titulo %}
+    Lista de Especies
+{% endblock %}
+
+
+
+{% block option_campos_select_filtros %}
+<option value="nombreCientifico">Científico</option>
+<option value="nombreComun">Común</option>
+<option value="tipoDeEspecie">Tipo</option>
+<!--<option value="especie_nombreComun">Especie</option>-->
+<!--<option value="especie_nombreCientifico">Especie Nombre Científico </option>  Nombre Común-->
+<!--<option value="especie_tipoDeEspecie">Tipo de Especie</option>-->
+
+{% endblock%}
+
+
+{% block contenido_lista %}
+
+
+<!-- mt-4 mb-4  <div class="row "></div>-->
+{% for v in object_list %}
+
+<section id="about" class="about   w-100 {% if forloop.counter|divisibleby:2 %}bd_gris{% endif %}">
+      <div class="container" data-aos="fade-up">
+
+
+<div class="row position-relative  ">
+
+          <div class="col-lg-7 about-img " style="background-image: url({% if v.Imagen %}{{v.Imagen.url}}{% else %}'{% static 'img/especie_no_imagen.jpg' %}'{% endif %});"></div>
+
+          <div class="col-lg-7">
+            <h2>{{v.nombreCientifico}}</h2>
+            <div class="our-story {% if forloop.counter|divisibleby:2 %}bd_blanco{% endif %}">
+              <h4>{{v.nombreComun}}</h4>
+              <h3>{{v.tipoDeEspecie}}</h3>
+
+                <p>{{v.descripcion|safe}}</p>
+
+
+
+            </div>
+          </div>
+
+        </div>
+
+
+
+
+      </div>
+</section>
+
+
+
+
+
+
+{% empty %}
+ <span>No se encontraron resultados.</span>
+
+
+{% endfor %}
+
+{% endblock%}
+
+
+{% block scripts_extras %}
+
+
+{% endblock%}
+
+
+<!--<html xmlns="http://www.w3.org/1999/xhtml">-->
+<!--<head>-->
+<!--    <title></title>-->
+<!--</head>-->
+<!--<body>-->
+<!--    va a mostrar las palntillas <br />-->
+<!--    <form method="get">-->
+<!--        {% csrf_token %}-->
+<!--        <input type="text" name="q" placeholder="Buscar...">-->
+<!--        <select name="campo">-->
+<!--            <option value="Nombre">Nombre</option>-->
+<!--            <option value="NombreAbreviado">Abreviado</option>-->
+<!--        </select>-->
+<!--        <button type="submit">Buscar</button>-->
+<!--    </form>-->
+<!--     <form method="get" action="/reporte_institucion_productiva_pdf/">-->
+<!--        {% csrf_token %}-->
+<!--         {% if 'q' in request.GET and 'campo' in request.GET %}-->
+<!--        <input type="hidden" name="campo" value="{{request.GET.campo}}">-->
+<!--         <input type="hidden" name="q" value="{{request.GET.q}}">-->
+<!--         {% endif %}-->
+<!--        <button type="submit">Reporte pdf</button>-->
+<!--    </form>-->
+<!--    <br />-->
+<!--    {% for v in object_list %}-->
+<!--    {{v.Nombre}} -&#45;&#45; {{v.NombreAbreviado}} -->
+<!--    <a href="/instituciones_productivas/findById/{{v.id}}">ver libro</a> <br />-->
+
+<!--    {% empty %}-->
+<!--    <span>No se encontraron resultados.</span>-->
+
+
+<!--    {% endfor %}-->
+
+<!--    {% if is_paginated %}-->
+<!--    <div class="pagination">-->
+<!--        <span class="page-links">-->
+<!--            {% if page_obj.has_previous %}-->
+<!--            <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}{% if 'q' in request.GET and 'campo' in request.GET %}&campo={{ request.GET.campo }}&q={{ request.GET.q }}{% endif %}">previous</a>-->
+<!--            {% endif %}-->
+<!--            <span class="page-current">-->
+<!--                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.-->
+<!--            </span>-->
+<!--            {% if page_obj.has_next %}-->
+<!--            <a href="{{ request.path }}?page={{ page_obj.next_page_number }}{% if 'q' in request.GET and 'campo' in request.GET %}&campo={{ request.GET.campo }}&q={{ request.GET.q }}{% endif %}">next</a>-->
+<!--            {% endif %}-->
+<!--        </span>-->
+<!--    </div>-->
+<!--    {% endif %}-->
+<!--</body>-->
+<!--</html>-->

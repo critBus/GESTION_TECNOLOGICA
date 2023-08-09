@@ -58,5 +58,6 @@ class InstitucionCientifica(models.Model):
                                                     ,verbose_name="Tipo")
 
     tecnologias = models.ManyToManyField(Tecnologia)
+    descripcion = models.TextField(verbose_name="Descripción", blank=True, null=True)
     def __str__(self):
         return self.Nombre
