@@ -11,6 +11,7 @@ from solo.models import SingletonModel
 from django.core.validators import RegexValidator
 from django.forms import TextInput
 
+
 from CONFIGURACION.models import *
 from TECNOLOGIAS.models import *
 
