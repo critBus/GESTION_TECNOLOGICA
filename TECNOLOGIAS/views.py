@@ -88,17 +88,19 @@ class Especie_ListView(generic.ListView):
         context['config']=config
         context['lcp'] = lcp
         context['urlPdf'] = '/reporte_especie_pdf/'
+
         return context
 
 #
-# class Especie_DetailView(generic.DetailView):
-#     model = Tecnologia
-#     def get_context_data(self, *a, object_list=None, **kwargs):
-#         context=super().get_context_data(*a,object_list=object_list,**kwargs)
-#         config = ConfiguracionGeneral.get_solo()
-#         lcp = LocalizacionDePagina("Servicios","Detalles", "Tipo De Tecnología")
-#         context['config']=config
-#         context['lcp'] = lcp
-#         context['industrias'] = InstitucionCientifica.objects.filter(tecnologias=context['object'])
-#
-#         return context
+class Especie_DetailView(generic.DetailView):
+    model = Especie
+    def get_context_data(self, *a, object_list=None, **kwargs):
+        context=super().get_context_data(*a,object_list=object_list,**kwargs)
+        config = ConfiguracionGeneral.get_solo()
+        lcp = LocalizacionDePagina("Servicios","Detalles", "Tipo De Especie")
+        context['config']=config
+        context['lcp'] = lcp
+        context['industrias'] = InstitucionCientifica.objects.filter(
+            tecnologias__in=Tecnologia.objects.filter(especies=context['object']))
+
+        return context

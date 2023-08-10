@@ -44,6 +44,17 @@ class ProductoInline(NestedStackedInline):#admin.TabularInline
     extra = 1
     fk_name = 'institucionProductiva'
     formfield_overrides = STYLES_FORMFIELDS
+    # form =
+
+    # def get_form(self, request, obj=None, change=False, **kwargs):
+    #     forms = super(ProductoInline, self).get_form(request, obj, change, **kwargs)
+    #     forms.base_fields['tipoDeProducto'].widget.can_add_related = False
+    #     forms.base_fields['tipoDeProducto'].widget.can_change_related = False  # can_view_related
+    #     forms.base_fields['tipoDeProducto'].widget.can_view_related = False
+    #
+    #
+    #
+    #     return forms
 
 
 class InstitucionProductivaResource(resources.ModelResource):
@@ -69,6 +80,23 @@ class InstitucionProductivaAdmin(ImportExportActionModelAdmin):#admin.ModelAdmin
         forms.base_fields['municipio'].widget.can_add_related = False
         forms.base_fields['municipio'].widget.can_change_related = False  # can_view_related
         forms.base_fields['municipio'].widget.can_view_related = False
+
+        # print(vars(forms))
+
+
         return forms
 admin.site.register(InstitucionProductiva,InstitucionProductivaAdmin)
+
+
+# class ProductoResource(resources.ModelResource):
+#     class Meta:
+#         model = Producto
+#         fields = ('nombre', 'tipoDeProducto')
+#         export_order = ('nombre', 'tipoDeProducto')
+# class ProductoAdmin(ImportExportActionModelAdmin):
+#     resource_class = ProductoResource
+#     model = Producto
+#     formfield_overrides = STYLES_FORMFIELDS
+#
+# admin.site.register(Producto,ProductoAdmin)
 

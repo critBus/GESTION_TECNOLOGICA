@@ -1,0 +1,129 @@
+{% extends "visualCliente/padre_breadcrumbs.html" %}
+{% load static %}
+
+{% block titulo %}
+    Producto
+{% endblock %}
+
+
+
+{% block contenido %}
+
+<!-- ======= Blog Details Section ======= -->
+    <section id="blog" class="blog">
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row g-5">
+
+          <div class="col-lg-8">
+
+            <article class="blog-details">
+                {% if object.Imagen %}
+              <div class="post-img">
+                <img src="{{ object.Imagen.url }}" alt="" class="img-fluid">
+              </div>
+                {% endif %}
+              <h2 class="title">{{object.nombre}}</h2>
+
+              <div class="meta-top">
+                <ul>
+                  <li class="d-flex align-items-center"><i class="bi bi-box"></i>
+<!--                      <a href="blog-details.html"> </a>-->
+                          {{object.tipoDeProducto.nombre}}</li>
+                  <li class="d-flex align-items-center"><i class="bi bi-geo-alt"></i>
+<!--                      <a href="blog-details.html">-->
+<!--                          <time datetime="2020-01-01">Jan 1, 2022</time></a>-->
+                      {{object.institucionProductiva.Nombre}}
+                  </li>
+                  <li class="d-flex align-items-center"><i class="bi bi-geo-fill"></i>
+<!--                      <a href="blog-details.html"> </a>-->
+                      {{object.institucionProductiva.NombreAbreviado}}
+                  </li>
+                </ul>
+              </div><!-- End meta top -->
+
+              <div class="content">
+                {% if object.descripcion %}
+                <p>
+                  {{object.descripcion|safe}}
+                </p>
+                {% endif %}
+
+              </div><!-- End post content -->
+
+
+            </article><!-- End blog post -->
+
+
+
+          </div>
+
+          <div class="col-lg-4">
+
+            <div class="sidebar">
+            <!--
+              <div class="sidebar-item search-form">
+                <h3 class="sidebar-title">Search</h3>
+                <form action="" class="mt-3">
+                  <input type="text">
+                  <button type="submit"><i class="bi bi-search"></i></button>
+                </form>
+              </div>-->
+                <!-- End sidebar search formn-->
+              <div class="sidebar-item categories">
+                <h3 class="sidebar-title">Características</h3>
+                <ul class="mt-3">
+
+                  <li><i class="bi bi-back"></i><b> Tipo:</b> </li>
+                  <li><i class="bi bi-dot"></i> {{object.tipoDeProducto.nombre}}</li>
+                  <li><i class="bi bi-back"></i><b> Institución:</b> </li>
+                  <li><i class="bi bi-dot"></i> {{object.institucionProductiva.Nombre}}</li>
+                  <li><i class="bi bi-back"></i><b> Institución Abreviado:</b> </li>
+                  <li><i class="bi bi-dot"></i> {{object.institucionProductiva.NombreAbreviado}}</li>
+              </ul>
+              </div>
+
+              <div class="sidebar-item categories">
+                <h3 class="sidebar-title">Ubicación</h3>
+                <ul class="mt-3">
+                  <li><i class="bi bi-signpost"></i><b> Provicia:</b> {{object.institucionProductiva.provincia.nombre}}<br/></li>
+                    <li><i class="bi bi-signpost"></i><b> Municipio:</b> {{object.institucionProductiva.municipio.nombre}}<br/></li>
+                    <li><i class="bi bi-signpost-split"></i><b> Dirección:</b> {{object.institucionProductiva.Direccion}}<br/></li>
+
+
+
+
+
+                </ul>
+              </div>
+              <div class="sidebar-item categories">
+                <h3 class="sidebar-title">Contacto</h3>
+                <ul class="mt-3">
+
+                  <li><i class="bi bi-telephone"></i><b> Teléfono:</b> {{object.institucionProductiva.Telefono}}<br/></li>
+                  <li><i class="bi bi-envelope"></i><b> Correo:</b> {{object.institucionProductiva.Correo}}<br/></li>
+                  <li><i class="bi bi-person"></i><b> Responsable:</b> {{object.institucionProductiva.Contacto}}<br/></li>
+              </ul>
+              </div>
+
+
+
+
+            </div><!-- End Blog Sidebar -->
+
+          </div>
+        </div>
+
+      </div>
+    </section><!-- End Blog Details Section -->
+
+
+
+
+
+{% endblock%}
+
+{% block scripts_extras %}
+
+
+{% endblock%}

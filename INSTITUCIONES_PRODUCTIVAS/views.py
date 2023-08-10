@@ -5,6 +5,7 @@ from .models import *
 import os
 from django.views import generic
 from GESTION_TECNOLOGICA.Utiles.LocalizacionDePagina import *
+from django.db.models import Q
 def rellenar_instituciones_productivas(request):
     class LT:
         def __init__(self):
@@ -89,6 +90,50 @@ class InstitucionProductiva_DetailView(generic.DetailView):
         context=super().get_context_data(*a,object_list=object_list,**kwargs)
         config = ConfiguracionGeneral.get_solo()
         lcp = LocalizacionDePagina("Instituciones","Detalles", "Institucion Productiva")
+        context['config']=config
+        context['lcp'] = lcp
+
+        return context
+
+
+
+class Producto_ListView(generic.ListView):
+    model = Producto
+    paginate_by=10
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        q = self.request.GET.get('q')
+        campo = self.request.GET.get('campo')
+        if q and campo:
+            q = q.strip()
+            if campo=='nombre':
+                queryset = queryset.filter(nombre__icontains=q)
+            elif campo=='Tipo':
+                queryset = queryset.filter(tipoDeProducto__nombre__icontains=q)
+            elif campo=='Institución':
+                queryset = queryset.filter(Q(institucionProductiva__Nombre__icontains=q)|Q(institucionProductiva__NombreAbreviado__icontains=q))
+            # elif campo=='Institución_Abreviado':
+            #     queryset = queryset.filter(institucionProductiva__NombreAbreviado__icontains=q)
+
+            else:
+                queryset = queryset.filter(nombre__icontains=q)
+        return queryset
+    def get_context_data(self, *a, object_list=None, **kwargs):
+        context=super().get_context_data(*a,object_list=object_list,**kwargs)
+        config = ConfiguracionGeneral.get_solo()
+        lcp = LocalizacionDePagina("Servicios","Lista", "Productos")
+        context['config']=config
+        context['lcp'] = lcp
+        context['urlPdf'] = '/reporte_productos_pdf/'
+        return context
+
+
+class Producto_DetailView(generic.DetailView):
+    model = Producto
+    def get_context_data(self, *a, object_list=None, **kwargs):
+        context=super().get_context_data(*a,object_list=object_list,**kwargs)
+        config = ConfiguracionGeneral.get_solo()
+        lcp = LocalizacionDePagina("Servicios","Detalles", "Productos")
         context['config']=config
         context['lcp'] = lcp
 

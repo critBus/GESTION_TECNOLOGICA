@@ -2,18 +2,15 @@
 {% load static %}
 
 {% block titulo %}
-    Lista de Especies
+    Productos
 {% endblock %}
 
 
 
 {% block option_campos_select_filtros %}
-<option value="nombreCientifico">Científico</option>
-<option value="nombreComun">Común</option>
-<option value="tipoDeEspecie">Tipo</option>
-<!--<option value="especie_nombreComun">Especie</option>-->
-<!--<option value="especie_nombreCientifico">Especie Nombre Científico </option>  Nombre Común-->
-<!--<option value="especie_tipoDeEspecie">Tipo de Especie</option>-->
+<option value="nombre">Nombre</option>
+<option value="Tipo">Tipo</option>
+<option value="Institución">Institución</option>
 
 {% endblock%}
 
@@ -30,23 +27,21 @@
 
 <div class="row position-relative  ">
 
-          <div class="col-lg-7 about-img " style="background-image: url({% if v.Imagen %}{{v.Imagen.url}}{% else %}'{% static 'img/especie_no_imagen.jpg' %}'{% endif %});"></div>
+          <div class="col-lg-7 about-img " style="background-image: url({% if v.Imagen %}{{v.Imagen.url}}{% else %}'{% static 'img/producto_no_imagen.jpg' %}'{% endif %});"></div>
 
           <div class="col-lg-7">
-            <h2>{{v.nombreCientifico}}</h2>
+            <h2>{{v.nombre}} - [{{v.institucionProductiva.NombreAbreviado}}]</h2>
             <div class="our-story {% if forloop.counter|divisibleby:2 %}bd_blanco{% endif %}">
-              <h4>{{v.nombreComun}}</h4>
-              <h3>{{v.tipoDeEspecie}}</h3>
+              <h4>{{v.tipoDeProducto.nombre}}</h4>
+              <h3>{{v.institucionProductiva.Nombre}}</h3>
+              <p>{{v.descripcion|safe}}</p>
 
-                <p>{{v.descripcion|safe}}</p>
 
-            <div class="watch-video d-flex align-items-center position-relative">
+              <div class="watch-video d-flex align-items-center position-relative">
                 <i class="bi bi-info-circle"></i>
-                <a href="/Servicios/Especies/findById/{{v.id}}" class=" stretched-link">Leer Más</a>
+                <a href="/Servicios/Productos/findById/{{v.id}}" class=" stretched-link">Leer Más</a>
               </div>
-
             </div>
-
           </div>
 
         </div>
