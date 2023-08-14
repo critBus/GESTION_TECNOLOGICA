@@ -96,7 +96,7 @@ class InstitucionCientifica_ListView(generic.ListView):
         lcp = LocalizacionDePagina("Instituciones","Lista", "Instituciones Científicas")
         context['config']=config
         context['lcp'] = lcp
-        context['urlPdf'] = '/reporte_institucion_cientifica_pdf/'
+        context['urlExportar'] = '/institucion_cientifica'
         return context
 
 

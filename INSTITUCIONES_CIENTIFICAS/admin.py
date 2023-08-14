@@ -38,39 +38,6 @@ admin.site.register(TipoDeInstitucionCientifica,TipoDeInstitucionCientificaAdmin
 
 
 
-class InstitucionCientificaResource(resources.ModelResource):
-    tecnologias=Field()
-    NombreAbreviado=Field(
-        column_name='Nombre Abreviado'
-        , attribute='NombreAbreviado'
-    )
-    tipoDeInstitucionCientifica=Field(
-        column_name='Tipo'
-        , attribute='tipoDeInstitucionCientifica'
-    )
-
-    provincia=Field()
-    class Meta:
-        model = InstitucionCientifica
-        fields = ('Nombre','Contacto','Telefono','Correo','municipio','Direccion')
-        export_order = ('Nombre', 'NombreAbreviado','Contacto','Telefono','Correo','provincia','municipio','Direccion','tipoDeInstitucionCientifica')
-
-    @staticmethod
-    @retornarBienDatoExportar
-    def dehydrate_tecnologias(instance):
-        if instance.tecnologias is not None:
-            return "\n".join([z.nombre for z in instance.tecnologias.all()])
-        return ""
-
-    @staticmethod
-    @retornarBienDatoExportar
-    def dehydrate_provincia(instance):
-        if instance.provincia is not None:
-            return instance.provincia.nombre
-        return ""
-
-
-
 class InstitucionCientificaAdmin(ImportExportActionModelAdmin):#admin.ModelAdmin
     resource_class = InstitucionCientificaResource
     model = InstitucionCientifica

@@ -35,6 +35,7 @@ class AdministradorDeReporte:
         self.claseModelo = None
         self.dic_campo_atributo = {}
         self.dic_campo_metodo_filtrar = {}#q,campo->List
+        self.claseResource=None
     def setClaseModelo(self,claseModelo):
         self.claseModelo =claseModelo
         self.dic_campo_atributo={str(v):str(v) for v in vars(claseModelo)}
@@ -104,22 +105,44 @@ class AdministradorDeReporte:
         metodoAction.short_description = "Exportar a PDF"
         return metodoAction
     def filtrar(self,request):
-        pass
+        q = request.GET.get('q')
+        campo = request.GET.get('campo')
+        queryset=None
+        if q and campo:
+            q = q.strip()
+            if campo in self.dic_campo_metodo_filtrar:
+                queryset = self.dic_campo_metodo_filtrar[campo](q, campo)
+            elif campo in self.dic_campo_atributo:
+                valor = self.dic_campo_atributo[campo]
+                filtro = str(valor + "__icontains")
+                queryset = self.claseModelo.objects.filter(**{filtro: q})
+        else:
+            queryset = self.claseModelo.objects.all()
+        return queryset
     def getView(self):
         def metodoView(request):
-            q = request.GET.get('q')
-            campo = request.GET.get('campo')
-            if q and campo:
-                q=q.strip()
-                if campo in self.dic_campo_metodo_filtrar:
-                    queryset=self.dic_campo_metodo_filtrar[campo](q,campo)
-                elif campo in self.dic_campo_atributo:
-                    valor=self.dic_campo_atributo[campo]
-                    filtro=str(valor+"__icontains")
-                    queryset = self.claseModelo.objects.filter(**{filtro:q})
-            else:
-                queryset = self.claseModelo.objects.all()
-            return self.getAction()(None,None,queryset)
+
+            return self.getAction()(None,None,self.filtrar(request))
+        return metodoView
+
+    def getEndPoint_CSV(self):
+        def metodoView(request):
+            dataset=self.claseResource().export(self.filtrar(request))
+            data=dataset.csv
+            response = HttpResponse(data,content_type='text/csv')
+            return response
+
+
+        return metodoView
+
+    def getEndPoint_Exel(self):
+        def metodoView(request):
+            dataset=self.claseResource().export(self.filtrar(request))
+            data=dataset.xls
+            response = HttpResponse(data,content_type='application/vnd.ms-excel')
+            return response
+
+
         return metodoView
 
 
@@ -140,6 +163,7 @@ REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.dic_campo_atributo['Provincia']='provincia_
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.dic_campo_atributo['Municipio']='municipio__nombre'
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.dic_campo_atributo['Tipo']='tipoDeInstitucionProductiva__nombre'
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.dic_campo_metodo_filtrar['Producto']=lambda q,c:InstitucionProductiva.objects.filter(producto__in=Producto.objects.filter(nombre__icontains=q))
+REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.claseResource=InstitucionProductivaResource
 
 
 
@@ -162,7 +186,7 @@ REPORTE_INSTITUCIONES_CIENTIFICA_PDF.dic_campo_atributo['Municipio']='municipio_
 REPORTE_INSTITUCIONES_CIENTIFICA_PDF.dic_campo_atributo['Tipo']='tipoDeInstitucionCientifica__nombre'
 REPORTE_INSTITUCIONES_CIENTIFICA_PDF.dic_campo_atributo['Tecnologia']='tecnologias__nombre'
 #REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.dic_campo_metodo_filtrar['Tecnologia']=lambda q,c:InstitucionProductiva.objects.filter(producto__in=Tecnologia.objects.filter(nombre__icontains=q))
-
+REPORTE_INSTITUCIONES_CIENTIFICA_PDF.claseResource=InstitucionCientificaResource
 
 REPORTE_TECNOLOGIAS_PDF=AdministradorDeReporte()
 REPORTE_TECNOLOGIAS_PDF.titulo="Tecnologías"
@@ -175,6 +199,7 @@ REPORTE_TECNOLOGIAS_PDF.dic_campo_atributo['Tipo']='tipoDeTecnologia__nombre'
 REPORTE_TECNOLOGIAS_PDF.dic_campo_atributo['especie_nombreComun']='especies__nombreComun'
 REPORTE_TECNOLOGIAS_PDF.dic_campo_atributo['especie_nombreCientifico']='especies__nombreCientifico'
 REPORTE_TECNOLOGIAS_PDF.dic_campo_atributo['especie_tipoDeEspecie']='especies__tipoDeEspecie__nombre'
+REPORTE_TECNOLOGIAS_PDF.claseResource=TecnologiaResource
 
 
 REPORTE_ESPECIES_PDF=AdministradorDeReporte()
@@ -183,6 +208,7 @@ REPORTE_ESPECIES_PDF.add('Nombre Común',lambda v:v.nombreComun)
 REPORTE_ESPECIES_PDF.add('Nombre Científico',lambda v:v.nombreCientifico)
 REPORTE_ESPECIES_PDF.add('Tipo',lambda v:v.tipoDeEspecie)#lambda v:",".join([z.nombre for z in v.tipoDeTecnologia.all()]))
 REPORTE_ESPECIES_PDF.setClaseModelo(Especie)
+REPORTE_ESPECIES_PDF.claseResource=EspecieResource
 
 REPORTE_PRODUCTOS_PDF=AdministradorDeReporte()
 REPORTE_PRODUCTOS_PDF.titulo="Productos"
@@ -194,4 +220,5 @@ REPORTE_PRODUCTOS_PDF.dic_campo_atributo['Tipo']='tipoDeProducto__nombre'
 # REPORTE_PRODUCTOS_PDF.dic_campo_atributo['Institución']='institucionProductiva__Nombre'
 # REPORTE_PRODUCTOS_PDF.dic_campo_atributo['Institución_Abreviado']='institucionProductiva__NombreAbreviado'
 REPORTE_PRODUCTOS_PDF.dic_campo_metodo_filtrar['Institución']=lambda q,c:Producto.objects.filter(Q(institucionProductiva__Nombre__icontains=q)|Q(institucionProductiva__NombreAbreviado__icontains=q))
+REPORTE_PRODUCTOS_PDF.claseResource=ProductoResource
 

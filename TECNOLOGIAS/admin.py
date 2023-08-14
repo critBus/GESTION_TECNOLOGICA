@@ -28,24 +28,6 @@ from import_export.fields import Field
 from GESTION_TECNOLOGICA.Utiles.UtilesParaExportar import *
 from REPORTES.views import *
 
-class EspecieResource(resources.ModelResource):
-    nombreCientifico=Field(
-        column_name='Nombre Científico'
-        , attribute='nombreCientifico'
-    )
-    nombreComun=Field(
-        column_name='Nombre Común'
-        , attribute='nombreComun'
-    )
-
-    tipoDeEspecie = Field(
-        column_name='Tipo'
-        , attribute='tipoDeEspecie'
-    )
-    class Meta:
-        model = Especie
-        fields = ()
-        export_order = ('nombreCientifico', 'nombreComun','tipoDeEspecie')
 
 
 class EspecieAdmin(ImportExportActionModelAdmin):#admin.ModelAdmin
@@ -66,31 +48,6 @@ class TipoDeTecnologiaAdmin(admin.ModelAdmin):
     formfield_overrides = STYLES_FORMFIELDS
 admin.site.register(TipoDeTecnologia,TipoDeTecnologiaAdmin)
 
-
-
-class TecnologiaResource(resources.ModelResource):
-    especies=Field()
-    accionEsperada=Field(
-        column_name='Accion Esperada'
-        , attribute='accionEsperada'
-    )
-    tipoDeTecnologia=Field(
-        column_name='Tipo'
-        , attribute='tipoDeTecnologia'
-    )
-
-
-    class Meta:
-        model = Tecnologia
-        fields = ('nombre',)
-        export_order = ('nombre', 'accionEsperada','tipoDeTecnologia')
-
-    @staticmethod
-    @retornarBienDatoExportar
-    def dehydrate_especies(instance):
-        if instance.especies is not None:
-            return "\n".join([z.nombreCientifico for z in instance.especies.all()])
-        return ""
 
 
 

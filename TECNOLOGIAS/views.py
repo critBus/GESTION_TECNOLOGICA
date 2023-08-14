@@ -42,7 +42,7 @@ class Tecnologia_ListView(generic.ListView):
         lcp = LocalizacionDePagina("Servicios","Lista", "Tipos De Tecnologías")
         context['config']=config
         context['lcp'] = lcp
-        context['urlPdf'] = '/reporte_tecnologia_pdf/'
+        context['urlExportar'] = '/tecnologia'
         return context
 
 
@@ -87,7 +87,7 @@ class Especie_ListView(generic.ListView):
         lcp = LocalizacionDePagina("Servicios","Lista", "Tipos De Especies")
         context['config']=config
         context['lcp'] = lcp
-        context['urlPdf'] = '/reporte_especie_pdf/'
+        context['urlExportar'] = '/especie'
 
         return context
 

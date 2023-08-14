@@ -58,41 +58,6 @@ class ProductoInline(NestedStackedInline):#admin.TabularInline
     #     return forms
 
 
-class InstitucionProductivaResource(resources.ModelResource):
-    producto=Field()
-    NombreAbreviado=Field(
-        column_name='Nombre Abreviado'
-        , attribute='NombreAbreviado'
-    )
-    tipoDeInstitucionProductiva=Field(
-        column_name='Tipo'
-        , attribute='tipoDeInstitucionProductiva'
-    )
-    capacidadDeRefrigeracion=Field(
-        column_name='Refrigeración'
-        , attribute='capacidadDeRefrigeracion'
-    )
-    provincia=Field()
-    class Meta:
-        model = InstitucionProductiva
-        fields = ('Nombre','Contacto','Telefono','Correo','municipio','Direccion')
-        export_order = ('Nombre', 'NombreAbreviado','Contacto','Telefono','Correo','provincia','municipio','Direccion','tipoDeInstitucionProductiva','capacidadDeRefrigeracion')
-
-    @staticmethod
-    @retornarBienDatoExportar
-    def dehydrate_producto(instance):
-        if instance.producto_set is not None:
-            return "\n".join([z.nombre for z in instance.producto_set.all()])
-        return ""
-
-    @staticmethod
-    @retornarBienDatoExportar
-    def dehydrate_provincia(instance):
-        if instance.provincia is not None:
-            return instance.provincia.nombre
-        return ""
-
-
 
 from REPORTES.views import *
 class InstitucionProductivaAdmin(ImportExportActionModelAdmin):#admin.ModelAdmin

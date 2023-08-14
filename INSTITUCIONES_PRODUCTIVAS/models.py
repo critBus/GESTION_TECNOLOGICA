@@ -10,7 +10,11 @@ from solo.models import SingletonModel
 
 from django.core.validators import RegexValidator
 from django.forms import TextInput
-
+from import_export import resources
+from import_export.admin import ExportActionMixin, ImportExportActionModelAdmin
+from import_export.widgets import ManyToManyWidget
+from import_export.fields import Field
+from GESTION_TECNOLOGICA.Utiles.UtilesParaExportar import *
 
 from CONFIGURACION.models import *
 from TECNOLOGIAS.models import *
@@ -83,3 +87,74 @@ class Producto(models.Model):
     modified = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.nombre
+
+
+class InstitucionProductivaResource(resources.ModelResource):
+    producto=Field()
+    NombreAbreviado=Field(
+        column_name='Nombre Abreviado'
+        , attribute='NombreAbreviado'
+    )
+    tipoDeInstitucionProductiva=Field(
+        column_name='Tipo'
+        , attribute='tipoDeInstitucionProductiva'
+    )
+    capacidadDeRefrigeracion=Field(
+        column_name='Refrigeración'
+        , attribute='capacidadDeRefrigeracion'
+    )
+    provincia=Field()
+    class Meta:
+        model = InstitucionProductiva
+        fields = ('Nombre','Contacto','Telefono','Correo','municipio','Direccion')
+        export_order = ('Nombre', 'NombreAbreviado','Contacto','Telefono','Correo','provincia','municipio','Direccion','tipoDeInstitucionProductiva','capacidadDeRefrigeracion')
+
+    @staticmethod
+    @retornarBienDatoExportar
+    def dehydrate_producto(instance):
+        if instance.producto_set is not None:
+            return "\n".join([z.nombre for z in instance.producto_set.all()])
+        return ""
+
+    @staticmethod
+    @retornarBienDatoExportar
+    def dehydrate_provincia(instance):
+        if instance.provincia is not None:
+            return instance.provincia.nombre
+        return ""
+
+
+
+
+class ProductoResource(resources.ModelResource):
+    tipoDeProducto=Field(
+        column_name='Tipo'
+        , attribute='tipoDeProducto'
+    )
+    institucionProductiva=Field(
+        column_name='Institucón'
+        , attribute='institucionProductiva'
+    )
+    capacidadDeRefrigeracion=Field(
+        column_name='Refrigeración'
+        , attribute='capacidadDeRefrigeracion'
+    )
+    class Meta:
+        model = Producto
+        fields = ('nombre')
+        export_order = ('nombre', 'tipoDeProducto','institucionProductiva')
+
+    @staticmethod
+    @retornarBienDatoExportar
+    def dehydrate_tipoDeProducto(instance):
+        if instance.tipoDeProducto is not None:
+            return instance.tipoDeProducto.nombre
+        return ""
+
+    @staticmethod
+    @retornarBienDatoExportar
+    def dehydrate_institucionProductiva(instance):
+        if instance.institucionProductiva is not None:
+            return instance.institucionProductiva.Nombre
+        return ""
+

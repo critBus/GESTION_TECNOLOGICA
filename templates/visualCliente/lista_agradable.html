@@ -46,7 +46,8 @@
 
         </div>
         <div class="col-2">
-             <form method="get" action="{{urlPdf}}">
+            <div class="btn-group" role="group" aria-label="exportar">
+                <form method="get" action="{{urlExportar}}/reporte/pdf/">
                 {% csrf_token %}
                  {% if 'q' in request.GET and 'campo' in request.GET %}
                 <input type="hidden" name="campo" value="{{request.GET.campo}}">
@@ -54,6 +55,25 @@
                  {% endif %}
                 <button type="submit" class="btn" ><i class="bi bi-file-earmark-pdf-fill text-light"></i></button>
             </form>
+                <form method="get" action="{{urlExportar}}/reporte/csv/">
+                {% csrf_token %}
+                 {% if 'q' in request.GET and 'campo' in request.GET %}
+                <input type="hidden" name="campo" value="{{request.GET.campo}}">
+                 <input type="hidden" name="q" value="{{request.GET.q}}">
+                 {% endif %}
+                <button type="submit" class="btn" ><i class="bi bi-file-earmark-pdf-fill text-light"></i></button>
+            </form>
+                <form method="get" action="{{urlExportar}}/reporte/exel/">
+                {% csrf_token %}
+                 {% if 'q' in request.GET and 'campo' in request.GET %}
+                <input type="hidden" name="campo" value="{{request.GET.campo}}">
+                 <input type="hidden" name="q" value="{{request.GET.q}}">
+                 {% endif %}
+                <button type="submit" class="btn" ><i class="bi bi-file-earmark-pdf-fill text-light"></i></button>
+            </form>
+            </div>
+
+
         </div>
 
 <!--bi-filetype-pdf-->

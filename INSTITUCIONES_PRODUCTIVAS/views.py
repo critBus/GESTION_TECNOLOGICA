@@ -80,7 +80,7 @@ class InstitucionProductiva_ListView(generic.ListView):
         lcp = LocalizacionDePagina("Instituciones","Lista", "Instituciones Productivas")
         context['config']=config
         context['lcp'] = lcp
-        context['urlPdf'] = '/reporte_institucion_productiva_pdf/'
+        context['urlExportar'] = '/institucion_productiva'
         return context
 
 
@@ -124,7 +124,7 @@ class Producto_ListView(generic.ListView):
         lcp = LocalizacionDePagina("Servicios","Lista", "Productos")
         context['config']=config
         context['lcp'] = lcp
-        context['urlPdf'] = '/reporte_productos_pdf/'
+        context['urlExportar'] = '/productos'
         return context
 
 
