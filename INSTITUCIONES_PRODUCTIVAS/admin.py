@@ -101,6 +101,11 @@ class InstitucionProductivaAdmin(ImportExportActionModelAdmin):#admin.ModelAdmin
     formfield_overrides = STYLES_FORMFIELDS
     inlines = [ProductoInline]
     actions = [REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.getAction()]
+    list_display = ('Nombre', 'NombreAbreviado', 'tipoDeInstitucionProductiva', 'provincia', 'municipio')
+    search_fields = ('Nombre', 'NombreAbreviado', 'tipoDeInstitucionProductiva__nombre', 'provincia__nombre', 'municipio__nombre')
+    list_filter = ('tipoDeInstitucionProductiva', 'provincia', 'municipio')
+    ordering = ('Nombre', 'tipoDeInstitucionProductiva', 'provincia', 'municipio')
+    date_hierarchy = 'created'
     def get_form(self, request, obj=None, change=False, **kwargs):
         forms=super(InstitucionProductivaAdmin,self).get_form(request,obj,change,**kwargs)
         forms.base_fields['provincia'].widget.can_add_related = False

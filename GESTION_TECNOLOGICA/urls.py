@@ -27,7 +27,7 @@ from django.urls import include, re_path
 admin.site.site_header = 'Administración Instituciones Tecnológicas'
 admin.site.index_title = 'Panel de control'
 admin.site.site_title = 'Administración Instituciones Tecnológicas'
-admin.site.site_url = ''
+admin.site.site_url = 'http://127.0.0.1:8000/'
 
 urlpatterns = [
     path('', view_home, name='home'),

@@ -53,6 +53,12 @@ class EspecieAdmin(ImportExportActionModelAdmin):#admin.ModelAdmin
     model = Especie
     formfield_overrides = STYLES_FORMFIELDS
     actions = [REPORTE_ESPECIES_PDF.getAction()]
+    list_display = ('nombreCientifico', 'nombreComun', 'tipoDeEspecie')
+    search_fields = (
+        'nombreCientifico', 'nombreComun', 'tipoDeEspecie')
+    list_filter = ('tipoDeEspecie',)
+    ordering = ('nombreCientifico', 'nombreComun', 'tipoDeEspecie')
+    date_hierarchy = 'created'
 admin.site.register(Especie,EspecieAdmin)
 
 class TipoDeTecnologiaAdmin(admin.ModelAdmin):
@@ -93,5 +99,11 @@ class TecnologiaAdmin(ImportExportActionModelAdmin):#admin.ModelAdmin
     model = Tecnologia
     formfield_overrides = STYLES_FORMFIELDS
     actions = [REPORTE_TECNOLOGIAS_PDF.getAction()]
+    list_display = ('nombre', 'accionEsperada', 'tipoDeTecnologia')
+    search_fields = (
+    'nombre', 'accionEsperada', 'tipoDeTecnologia__nombre')
+    list_filter = ('accionEsperada', 'tipoDeTecnologia')
+    ordering = ('nombre', 'accionEsperada', 'tipoDeTecnologia')
+    date_hierarchy = 'created'
 admin.site.register(Tecnologia,TecnologiaAdmin)
 

@@ -62,7 +62,8 @@ class InstitucionProductiva(models.Model):
     capacidadDeRefrigeracion = models.FloatField(blank=True,verbose_name="Capacidad de refrigeración")
     descripcion = models.TextField(verbose_name="Descripción",blank=True,null=True)
 
-
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.Nombre
 
@@ -77,5 +78,8 @@ class Producto(models.Model):
     institucionProductiva = models.ForeignKey(InstitucionProductiva, on_delete=models.CASCADE)
     Imagen = models.ImageField(upload_to='Productos', blank=True, null=True)
     descripcion = models.TextField(verbose_name="Descripción", blank=True, null=True)
+
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.nombre

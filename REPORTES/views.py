@@ -103,6 +103,8 @@ class AdministradorDeReporte:
 
         metodoAction.short_description = "Exportar a PDF"
         return metodoAction
+    def filtrar(self,request):
+        pass
     def getView(self):
         def metodoView(request):
             q = request.GET.get('q')

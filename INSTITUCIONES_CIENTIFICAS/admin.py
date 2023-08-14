@@ -76,6 +76,11 @@ class InstitucionCientificaAdmin(ImportExportActionModelAdmin):#admin.ModelAdmin
     model = InstitucionCientifica
     formfield_overrides = STYLES_FORMFIELDS
     actions = [REPORTE_INSTITUCIONES_CIENTIFICA_PDF.getAction()]
+    list_display = ('Nombre','NombreAbreviado','tipoDeInstitucionCientifica','provincia','municipio')
+    search_fields = ('Nombre','NombreAbreviado','tipoDeInstitucionCientifica__nombre','provincia__nombre','municipio__nombre')
+    list_filter = ('tipoDeInstitucionCientifica','provincia','municipio')
+    ordering = ('Nombre','tipoDeInstitucionCientifica','provincia','municipio')
+    date_hierarchy = 'created'
     def get_form(self, request, obj=None, change=False, **kwargs):
         forms=super(InstitucionCientificaAdmin,self).get_form(request,obj,change,**kwargs)
         forms.base_fields['provincia'].widget.can_add_related = False

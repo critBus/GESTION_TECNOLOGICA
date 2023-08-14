@@ -37,6 +37,8 @@ class Especie(models.Model):
     )
     descripcion = models.TextField(verbose_name="Descripción", blank=True, null=True)
 
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
     #tecnologias = models.ManyToManyField(Tecnologia)
     def __str__(self):
         return self.nombreComun
@@ -54,7 +56,8 @@ class Tecnologia(models.Model):
     especies = models.ManyToManyField(Especie, verbose_name="Especies")
     descripcion = models.TextField(verbose_name="Descripción")
 
-
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.nombre
 
