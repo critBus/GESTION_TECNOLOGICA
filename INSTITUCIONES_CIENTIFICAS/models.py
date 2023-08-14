@@ -29,7 +29,7 @@ class TipoDeInstitucionCientifica(models.Model):
     class Meta:
         verbose_name = 'Tipo De Institución Científica'
         verbose_name_plural = 'Tipos De Instituciones Científicas'
-    nombre = models.CharField(max_length=255)
+    nombre = models.CharField(max_length=255,unique=True)
 
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
@@ -48,8 +48,8 @@ class InstitucionCientifica(models.Model):
     Nombre = models.CharField(max_length=255, unique=True)
     NombreAbreviado  = models.CharField(max_length=255, unique=True,verbose_name="Abreviado")
     Imagen = models.ImageField(upload_to='InstitucionCientifica',blank=True,null=True)
-    Contacto = models.CharField(max_length=255)
-    Telefono = models.CharField(max_length=255)
+    Contacto = models.CharField(max_length=255,validators=[VALIDADOR_NOMBRE])
+    Telefono = models.CharField(max_length=255,validators=[VALIDADOR_TELEFONO])
     Correo = models.EmailField(max_length=255)
     provincia = models.ForeignKey(Provincia, on_delete=models.CASCADE)
     municipio = ChainedForeignKey(
@@ -58,7 +58,9 @@ class InstitucionCientifica(models.Model):
         chained_model_field="provincia",
         show_all=False,
         auto_choose=True,
-        sort=True, on_delete=models.CASCADE)
+        sort=True, on_delete=models.CASCADE
+
+    )
     Direccion = models.CharField(max_length=255,verbose_name="Dirección")
     tipoDeInstitucionCientifica = models.ForeignKey(TipoDeInstitucionCientifica
                                                     , on_delete=models.CASCADE

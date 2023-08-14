@@ -24,7 +24,7 @@ class TipoDeTecnologia(models.Model):
     class Meta:
         verbose_name = 'Tipo De Tecnología'
         verbose_name_plural = 'Tipos De Tecnologías'
-    nombre = models.CharField(max_length=255)
+    nombre = models.CharField(max_length=255,unique=True)
 
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
@@ -35,7 +35,7 @@ class Especie(models.Model):
     class Meta:
         verbose_name = 'Especie'
         verbose_name_plural = 'Especies'
-    nombreCientifico = models.CharField(max_length=255,verbose_name="Nombre Científico")
+    nombreCientifico = models.CharField(max_length=255,unique=True,verbose_name="Nombre Científico")
     nombreComun = models.CharField(max_length=255,verbose_name="Nombre Común")
     Imagen = models.ImageField(upload_to='Tecnologias', blank=True, null=True)
     tipoDeEspecie = models.CharField(
@@ -56,7 +56,7 @@ class Tecnologia(models.Model):
     class Meta:
         verbose_name = 'Tecnología'
         verbose_name_plural = 'Tecnologías'
-    nombre = models.CharField(max_length=255)
+    nombre = models.CharField(max_length=255,unique=True)
     Imagen = models.ImageField(upload_to='Tecnologias',blank=True,null=True)
     accionEsperada = models.CharField(max_length=255, verbose_name="Acción Esperada")
     tipoDeTecnologia = models.ForeignKey(TipoDeTecnologia

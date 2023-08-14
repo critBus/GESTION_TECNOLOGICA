@@ -25,7 +25,7 @@ class TipoDeInstitucionProductiva(models.Model):
     class Meta:
         verbose_name = 'Tipo De Institución Productiva'
         verbose_name_plural = 'Tipos De Instituciones Productivas'
-    nombre = models.CharField(max_length=255)
+    nombre = models.CharField(max_length=255,unique=True)
 
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
@@ -36,7 +36,7 @@ class TipoDeProducto(models.Model):
     class Meta:
         verbose_name = 'Tipo De Producto'
         verbose_name_plural = 'Tipos De Productos'
-    nombre = models.CharField(max_length=255)
+    nombre = models.CharField(max_length=255,unique=True)
 
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
@@ -53,8 +53,8 @@ class InstitucionProductiva(models.Model):
     Nombre = models.CharField(max_length=255, unique=True)
     NombreAbreviado  = models.CharField(max_length=255, unique=True,verbose_name="Abreviado")
     Imagen = models.ImageField(upload_to='InstitucionProductiva',blank=True,null=True)
-    Contacto = models.CharField(max_length=255)
-    Telefono = models.CharField(max_length=255)
+    Contacto = models.CharField(max_length=255,validators=[VALIDADOR_NOMBRE])
+    Telefono = models.CharField(max_length=255,validators=[VALIDADOR_TELEFONO])
     Correo = models.EmailField(max_length=255)
     provincia = models.ForeignKey(Provincia, on_delete=models.CASCADE)
     municipio = ChainedForeignKey(
@@ -69,7 +69,7 @@ class InstitucionProductiva(models.Model):
                                                     , on_delete=models.CASCADE
                                                     ,verbose_name="Tipo"
                                                     )
-    capacidadDeRefrigeracion = models.FloatField(blank=True,verbose_name="Capacidad de refrigeración")
+    capacidadDeRefrigeracion = models.FloatField(verbose_name="Capacidad de refrigeración")
     descripcion = models.TextField(verbose_name="Descripción",blank=True,null=True)
 
     created = models.DateTimeField(auto_now_add=True)

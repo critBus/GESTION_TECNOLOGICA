@@ -14,6 +14,10 @@ from django.forms import TextInput
 
 # Register your models here.
 
+from django.core.validators import RegexValidator
+
+VALIDADOR_TELEFONO=RegexValidator(regex=r"^([+]?53)?\d{8}$",message="Teléfono incorrecto")#(?>!\s)
+VALIDADOR_NOMBRE=RegexValidator(regex=r"^[a-zA-ZáéíóúÁÉÍÓÚÑñ]+(?:\s+[a-zA-ZáéíóúÁÉÍÓÚÑñ]+){1,5}$",message="Nombre incorrecto")
 
 class ConfiguracionGeneral(SingletonModel):
     nombreSitio=models.CharField(max_length=20,verbose_name="Sitio",null=True)
@@ -23,9 +27,11 @@ class ConfiguracionGeneral(SingletonModel):
     linkTwitter = models.CharField(max_length=255, verbose_name="Link Twitter",null=True)
     linkYoutube= models.CharField(max_length=255, verbose_name="Link Youtube",null=True)
     correo=models.EmailField(null=True)
-    telefono=models.CharField(max_length=8,null=True)#, widget=CustomTelefotoWidget
+    telefono=models.CharField(max_length=11,null=True
+                              ,validators=[VALIDADOR_TELEFONO]
+                              )#, widget=CustomTelefotoWidget
     direccion=models.CharField(max_length=255,verbose_name="Dirección",null=True)
-    horarios = models.TextField()
+    horarios = models.TextField(null=True,blank=True)
 
 
 
@@ -66,7 +72,7 @@ class Informacion_Principal(models.Model):
         verbose_name = 'Información Principal '
         verbose_name_plural = 'Informaciones Principales'
     Pagina = models.ForeignKey(PaginaPrincipal, on_delete=models.CASCADE,related_name="pagina_principal_informacion")
-    Titulo = models.CharField(max_length=255)
+    Titulo = models.CharField(max_length=255,unique=True)
     Imagen = models.ImageField(upload_to='Informacion_Principal')
     Descripcion = models.TextField()
 
@@ -95,7 +101,9 @@ class Integrante(models.Model):
     class Meta:
         verbose_name = 'Quienes Somos'
         verbose_name_plural = 'Quienes Somos'
-    Nombre = models.CharField(max_length=255)
+    Nombre = models.CharField(max_length=255,unique=True
+                              ,validators=[VALIDADOR_NOMBRE]
+                              )
     Categoria = models.CharField(max_length=255)
     Imagen = models.ImageField(upload_to='Quienes_Somos_Integrantes')
     Descripcion = models.TextField()
