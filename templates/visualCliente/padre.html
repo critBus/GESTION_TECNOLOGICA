@@ -85,7 +85,7 @@
           <li><a href="{% url 'mapa' %}">Mapa</a></li>
 
 
-          <li><a href="{% url 'contacto' %}">Contacto</a></li>
+          <li><a href="/admin/">Administración</a></li>
         </ul>
       </nav><!-- .navbar -->
 
@@ -129,17 +129,36 @@
           </div><!-- End footer info column-->
 
           <div class="col-lg-2 col-md-3 footer-links">
-            <h4>Useful Links</h4>
+            <h4>Links Utiles</h4>
             <ul>
                 <li><a href="{% url 'home' %}">Principal</a></li>
           <li><a href="{% url 'quienes_somos' %}">Quienes Somos</a></li>
-          <li><a href="{% url 'instituciones_tecnologicas' %}">Instituciones Tecnológicas </a></li>
-          <li><a href="{% url 'instituciones_productivas' %}">Instituciones Productivas </a></li>
           <li><a href="{% url 'mapa' %}">Mapa</a></li>
+              <li><a href="/admin/">Administración</a></li>
 
 
             </ul>
           </div><!-- End footer links column-->
+
+          <div class="col-lg-2 col-md-3 footer-links">
+            <h4>Instituciones</h4>
+            <ul>
+                <li><a href="{% url 'instituciones_tecnologicas' %}">Tecnológicas </a></li>
+              <li><a href="{% url 'instituciones_productivas' %}">Productivas </a></li>
+
+
+            </ul>
+          </div>
+
+          <div class="col-lg-2 col-md-3 footer-links">
+            <h4>Servicios</h4>
+            <ul>
+                <li><a href="{% url 'productos' %}">Productos</a></li>
+              <li><a href="{% url 'tecnologias' %}">Tecnologías</a></li>
+              <li><a href="{% url 'especies' %}">Especies</a></li>
+
+            </ul>
+          </div>
 
 {#          <div class="col-lg-2 col-md-3 footer-links">#}
 {#            <h4>Our Services</h4>#}

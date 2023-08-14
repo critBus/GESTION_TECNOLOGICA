@@ -46,6 +46,11 @@ admin.site.register(Especie,EspecieAdmin)
 class TipoDeTecnologiaAdmin(admin.ModelAdmin):
     model = TipoDeTecnologia
     formfield_overrides = STYLES_FORMFIELDS
+    list_display = ('nombre',)
+    search_fields = (
+        'nombre',)
+    ordering = ('nombre',)
+    date_hierarchy = 'created'
 admin.site.register(TipoDeTecnologia,TipoDeTecnologiaAdmin)
 
 

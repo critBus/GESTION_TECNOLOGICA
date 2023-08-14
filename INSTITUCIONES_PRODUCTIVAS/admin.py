@@ -32,11 +32,21 @@ from GESTION_TECNOLOGICA.Utiles.UtilesParaExportar import *
 class TipoDeInstitucionProductivaAdmin(admin.ModelAdmin):
     model = TipoDeInstitucionProductiva
     formfield_overrides = STYLES_FORMFIELDS
+    list_display = ('nombre',)
+    search_fields = (
+        'nombre',)
+    ordering = ('nombre',)
+    date_hierarchy = 'created'
 admin.site.register(TipoDeInstitucionProductiva,TipoDeInstitucionProductivaAdmin)
 
 class TipoDeProductoAdmin(admin.ModelAdmin):
     model = TipoDeProducto
     formfield_overrides = STYLES_FORMFIELDS
+    list_display = ('nombre',)
+    search_fields = (
+        'nombre',)
+    ordering = ('nombre',)
+    date_hierarchy = 'created'
 admin.site.register(TipoDeProducto,TipoDeProductoAdmin)
 
 

@@ -26,6 +26,9 @@ class TipoDeInstitucionProductiva(models.Model):
         verbose_name = 'Tipo De Institución Productiva'
         verbose_name_plural = 'Tipos De Instituciones Productivas'
     nombre = models.CharField(max_length=255)
+
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.nombre
 
@@ -34,6 +37,9 @@ class TipoDeProducto(models.Model):
         verbose_name = 'Tipo De Producto'
         verbose_name_plural = 'Tipos De Productos'
     nombre = models.CharField(max_length=255)
+
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.nombre
 

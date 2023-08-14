@@ -53,7 +53,9 @@
                 <input type="hidden" name="campo" value="{{request.GET.campo}}">
                  <input type="hidden" name="q" value="{{request.GET.q}}">
                  {% endif %}
-                <button type="submit" class="btn" ><i class="bi bi-file-earmark-pdf-fill text-light"></i></button>
+                <button type="submit" class="btn btn_exportar"
+                    style="border-radius: 5px 0px 0px 5px;"
+                ><i class="bi bi-filetype-pdf text-light"></i></button>
             </form>
                 <form method="get" action="{{urlExportar}}/reporte/csv/">
                 {% csrf_token %}
@@ -61,7 +63,9 @@
                 <input type="hidden" name="campo" value="{{request.GET.campo}}">
                  <input type="hidden" name="q" value="{{request.GET.q}}">
                  {% endif %}
-                <button type="submit" class="btn" ><i class="bi bi-file-earmark-pdf-fill text-light"></i></button>
+                <button type="submit" class="btn btn_exportar"
+                style="border-radius: 0px"
+                ><i class="bi bi-filetype-csv text-light"></i></button>
             </form>
                 <form method="get" action="{{urlExportar}}/reporte/exel/">
                 {% csrf_token %}
@@ -69,7 +73,9 @@
                 <input type="hidden" name="campo" value="{{request.GET.campo}}">
                  <input type="hidden" name="q" value="{{request.GET.q}}">
                  {% endif %}
-                <button type="submit" class="btn" ><i class="bi bi-file-earmark-pdf-fill text-light"></i></button>
+                <button type="submit" class="btn btn_exportar"
+                style="border-radius: 0px 5px 5px 0px;"
+                ><i class="bi bi-filetype-xls text-light"></i></button>
             </form>
             </div>
 

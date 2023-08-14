@@ -74,8 +74,37 @@ class Informacion_Principal(models.Model):
     def __str__(self):
         return  self.Titulo
 
+class QuienesSomos(SingletonModel):
+    class Meta:
+        verbose_name = 'Quienes Somos'
+        verbose_name_plural = 'Quienes Somos'
+    Titulo = models.CharField(max_length=255)
+    SubTitulo = models.CharField(max_length=255,verbose_name="Sub Título")
+    Imagen = models.ImageField(upload_to='Quienes_Somos')
+    Descripcion = models.TextField()
+
+    DescripcionNuestroEquipo = models.TextField(verbose_name="Nuestro Equipo")
 
 
+
+    def __str__(self):
+        return self.Titulo
+
+
+class Integrante(models.Model):
+    class Meta:
+        verbose_name = 'Quienes Somos'
+        verbose_name_plural = 'Quienes Somos'
+    Nombre = models.CharField(max_length=255)
+    Categoria = models.CharField(max_length=255)
+    Imagen = models.ImageField(upload_to='Quienes_Somos_Integrantes')
+    Descripcion = models.TextField()
+    Pagina = models.ForeignKey(QuienesSomos, on_delete=models.CASCADE)
+
+
+
+    def __str__(self):
+        return self.Nombre
 
 class Provincia(models.Model):
     class Meta:

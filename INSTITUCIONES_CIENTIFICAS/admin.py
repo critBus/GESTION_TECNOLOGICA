@@ -33,6 +33,11 @@ from GESTION_TECNOLOGICA.Utiles.UtilesParaExportar import *
 class TipoDeInstitucionCientificaAdmin(admin.ModelAdmin):
     model = TipoDeInstitucionCientifica
     formfield_overrides = STYLES_FORMFIELDS
+    list_display = ('nombre',)
+    search_fields = (
+    'nombre',)
+    ordering = ('nombre',)
+    date_hierarchy = 'created'
 admin.site.register(TipoDeInstitucionCientifica,TipoDeInstitucionCientificaAdmin)
 
 

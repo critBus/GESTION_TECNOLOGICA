@@ -25,6 +25,9 @@ class TipoDeTecnologia(models.Model):
         verbose_name = 'Tipo De Tecnología'
         verbose_name_plural = 'Tipos De Tecnologías'
     nombre = models.CharField(max_length=255)
+
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.nombre
 

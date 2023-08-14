@@ -130,6 +130,7 @@ class AdministradorDeReporte:
             dataset=self.claseResource().export(self.filtrar(request))
             data=dataset.csv
             response = HttpResponse(data,content_type='text/csv')
+            response['Content-Disposition'] = 'attachment; filename="' + str(self.titulo) + '.csv"'
             return response
 
 
@@ -140,6 +141,7 @@ class AdministradorDeReporte:
             dataset=self.claseResource().export(self.filtrar(request))
             data=dataset.xls
             response = HttpResponse(data,content_type='application/vnd.ms-excel')
+            response['Content-Disposition']='attachment; filename="'+str(self.titulo)+'.xls"'
             return response
 
 

@@ -73,3 +73,17 @@ admin.site.register(ConfiguracionGeneral, ConfiguracionGeneralAdmin)
 
 admin.site.register(Provincia)
 admin.site.register(Municipio)
+
+
+class IntegranteInline(NestedStackedInline):#admin.TabularInline
+    model = Integrante
+    extra = 1
+    #fk_name = 'Pagina'
+    formfield_overrides = STYLES_FORMFIELDS
+
+class QuienesSomosAdmin(SingletonModelAdmin):
+    model = QuienesSomos
+    inlines = [IntegranteInline]
+    formfield_overrides = STYLES_FORMFIELDS
+
+admin.site.register(QuienesSomos, QuienesSomosAdmin)

@@ -20,6 +20,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from INSTITUCIONES.views import *
+from CONFIGURACION.views import *
 from INSTITUCIONES_PRODUCTIVAS.views import *
 from INSTITUCIONES_CIENTIFICAS.views import *
 from TECNOLOGIAS.views import *
