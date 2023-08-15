@@ -151,15 +151,16 @@ class AdministradorDeReporte:
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF=AdministradorDeReporte()
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.titulo="Instituciones Productivas"
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.add('Nombre',lambda v:v.Nombre)
-REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.add('Abreviado',lambda v:v.NombreAbreviado)
+# REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.add('Abreviado',lambda v:v.NombreAbreviado)
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.add('Contacto',lambda v:v.Contacto)
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.add('Telefono',lambda v:v.Telefono)
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.add('Correo',lambda v:v.Correo)
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.add('Provincia',lambda v:v.provincia.nombre)
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.add('Municipio',lambda v:v.municipio.nombre)
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.add('Direccion',lambda v:v.Direccion)
-REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.add('Institucion Productiva',lambda v:v.tipoDeInstitucionProductiva.nombre)
-REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.add('Refrigeracion',lambda v:v.capacidadDeRefrigeracion)
+REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.add('Tipo',lambda v:v.tipoDeInstitucionProductiva.nombre)
+REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.add('Productos',lambda v:v.capacidadDeProductos)
+REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.add('Refrigeracion',lambda v:v.capacidadDeRefrigeracion if v.TieneAlamacenConRefrigeracion else "-")
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.setClaseModelo(InstitucionProductiva)
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.dic_campo_atributo['Provincia']='provincia__nombre'
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.dic_campo_atributo['Municipio']='municipio__nombre'

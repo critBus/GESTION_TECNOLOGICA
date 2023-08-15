@@ -65,3 +65,47 @@ class InstitucionCientificaAdmin(ImportExportActionModelAdmin):#admin.ModelAdmin
         return forms
 admin.site.register(InstitucionCientifica,InstitucionCientificaAdmin)
 
+
+
+
+
+
+class EspecieAdmin(ImportExportActionModelAdmin):#admin.ModelAdmin
+    resource_class = EspecieResource
+    model = Especie
+    formfield_overrides = STYLES_FORMFIELDS
+    actions = [REPORTE_ESPECIES_PDF.getAction()]
+    list_display = ('nombreCientifico', 'nombreComun', 'tipoDeEspecie')
+    search_fields = (
+        'nombreCientifico', 'nombreComun', 'tipoDeEspecie')
+    list_filter = ('tipoDeEspecie',)
+    ordering = ('nombreCientifico', 'nombreComun', 'tipoDeEspecie')
+    date_hierarchy = 'created'
+admin.site.register(Especie,EspecieAdmin)
+
+class TipoDeTecnologiaAdmin(admin.ModelAdmin):
+    model = TipoDeTecnologia
+    formfield_overrides = STYLES_FORMFIELDS
+    list_display = ('nombre',)
+    search_fields = (
+        'nombre',)
+    ordering = ('nombre',)
+    date_hierarchy = 'created'
+admin.site.register(TipoDeTecnologia,TipoDeTecnologiaAdmin)
+
+
+
+
+class TecnologiaAdmin(ImportExportActionModelAdmin):#admin.ModelAdmin
+    resource_class = TecnologiaResource
+    model = Tecnologia
+    formfield_overrides = STYLES_FORMFIELDS
+    actions = [REPORTE_TECNOLOGIAS_PDF.getAction()]
+    list_display = ('nombre', 'accionEsperada', 'tipoDeTecnologia')
+    search_fields = (
+    'nombre', 'accionEsperada', 'tipoDeTecnologia__nombre')
+    list_filter = ('accionEsperada', 'tipoDeTecnologia')
+    ordering = ('nombre', 'accionEsperada', 'tipoDeTecnologia')
+    date_hierarchy = 'created'
+admin.site.register(Tecnologia,TecnologiaAdmin)
+

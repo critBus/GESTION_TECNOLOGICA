@@ -14,7 +14,7 @@ from django.forms import TextInput
 
 # Register your models here.
 
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator,MinValueValidator
 
 VALIDADOR_TELEFONO=RegexValidator(regex=r"^([+]?53)?\d{8}$",message="Teléfono incorrecto")#(?>!\s)
 VALIDADOR_NOMBRE=RegexValidator(regex=r"^[a-zA-ZáéíóúÁÉÍÓÚÑñ]+(?:\s+[a-zA-ZáéíóúÁÉÍÓÚÑñ]+){1,5}$",message="Nombre incorrecto")

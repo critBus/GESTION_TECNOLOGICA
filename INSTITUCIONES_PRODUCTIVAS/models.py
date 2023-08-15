@@ -43,7 +43,7 @@ class TipoDeProducto(models.Model):
     def __str__(self):
         return self.nombre
 
-
+VALIDADOR_CAPACIDAD_PRODUCTOS=MinValueValidator(limit_value=1,message="La capacidad de productos debe de ser superior a 1 ")
 
 class InstitucionProductiva(models.Model):
     class Meta:
@@ -69,7 +69,13 @@ class InstitucionProductiva(models.Model):
                                                     , on_delete=models.CASCADE
                                                     ,verbose_name="Tipo"
                                                     )
-    capacidadDeRefrigeracion = models.FloatField(verbose_name="Capacidad de refrigeración")
+    capacidadDeProductos=models.IntegerField(default=5
+                                             ,validators=[VALIDADOR_CAPACIDAD_PRODUCTOS]
+                                             ,verbose_name="Capacidad de Productos")
+
+    TieneAlamacenConRefrigeracion=models.BooleanField(default=False
+                                                      ,verbose_name="Tiene Refrigeración")
+    capacidadDeRefrigeracion = models.FloatField(verbose_name="Capacidad de refrigeración en KG")
     descripcion = models.TextField(verbose_name="Descripción",blank=True,null=True)
 
     created = models.DateTimeField(auto_now_add=True)
@@ -105,6 +111,10 @@ class InstitucionProductivaResource(resources.ModelResource):
         column_name='Tipo'
         , attribute='tipoDeInstitucionProductiva'
     )
+    capacidadDeProductos=Field(
+        column_name='Capacidad De Productos'
+        , attribute='capacidadDeProductos'
+    )
     capacidadDeRefrigeracion=Field(
         column_name='Refrigeración'
         , attribute='capacidadDeRefrigeracion'
@@ -113,7 +123,7 @@ class InstitucionProductivaResource(resources.ModelResource):
     class Meta:
         model = InstitucionProductiva
         fields = ('Nombre','Contacto','Telefono','Correo','municipio','Direccion')
-        export_order = ('Nombre', 'NombreAbreviado','Contacto','Telefono','Correo','provincia','municipio','Direccion','tipoDeInstitucionProductiva','capacidadDeRefrigeracion')
+        export_order = ('Nombre', 'NombreAbreviado','Contacto','Telefono','Correo','provincia','municipio','Direccion','tipoDeInstitucionProductiva','capacidadDeRefrigeracion','capacidadDeProductos')
 
     @staticmethod
     @retornarBienDatoExportar
@@ -122,6 +132,13 @@ class InstitucionProductivaResource(resources.ModelResource):
             return "\n".join([z.nombre for z in instance.producto_set.all()])
         return ""
 
+    @staticmethod
+    @retornarBienDatoExportar
+    def dehydrate_capacidadDeRefrigeracion(instance):
+        if instance.TieneAlamacenConRefrigeracion is not None \
+                and instance.capacidadDeRefrigeracion is not None:
+            return instance.capacidadDeRefrigeracion if instance.TieneAlamacenConRefrigeracion else "-"
+        return ""
     @staticmethod
     @retornarBienDatoExportar
     def dehydrate_provincia(instance):
