@@ -95,6 +95,10 @@ admin.site.register(TipoDeTecnologia,TipoDeTecnologiaAdmin)
 
 
 
+from django.contrib.admin.widgets import ManyToManyRawIdWidget
+from django.utils.encoding import smart_str
+from django.urls import reverse
+from django.utils.html import escape, mark_safe
 
 class TecnologiaAdmin(ImportExportActionModelAdmin):#admin.ModelAdmin
     resource_class = TecnologiaResource
@@ -107,5 +111,8 @@ class TecnologiaAdmin(ImportExportActionModelAdmin):#admin.ModelAdmin
     list_filter = ('accionEsperada', 'tipoDeTecnologia')
     ordering = ('nombre', 'accionEsperada', 'tipoDeTecnologia')
     date_hierarchy = 'created'
+    #raw_id_fields = ['especies']
+    #autocomplete_fields = ['especies']
+    
 admin.site.register(Tecnologia,TecnologiaAdmin)
 
