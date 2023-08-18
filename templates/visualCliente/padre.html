@@ -59,7 +59,8 @@
       <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
       <nav id="navbar" class="navbar">
         <ul>
-          <li><a href="{% url 'home' %}" class="active">Principal</a></li>
+{#            class="active"#}
+          <li><a href="{% url 'home' %}" >Principal</a></li>
           <li><a href="{% url 'quienes_somos' %}">Quienes Somos</a></li>
 
           <li class="dropdown"><a href="#"><span>Instituciones</span> <i
@@ -80,6 +81,7 @@
             </ul>
           </li>
           <li><a href="{% url 'especies' %}">Especies</a></li>
+            <li><a href="{% url 'galeria' %}">Galeria</a></li>
 
 
 
@@ -134,8 +136,10 @@
             <ul>
                 <li><a href="{% url 'home' %}">Principal</a></li>
           <li><a href="{% url 'quienes_somos' %}">Quienes Somos</a></li>
+                <li><a href="{% url 'galeria' %}">Galeria</a></li>
           <li><a href="{% url 'mapa' %}">Mapa</a></li>
               <li><a href="/admin/">Administración</a></li>
+
 
 
             </ul>

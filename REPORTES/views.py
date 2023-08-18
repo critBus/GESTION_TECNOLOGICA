@@ -166,6 +166,7 @@ REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.dic_campo_atributo['Provincia']='provincia_
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.dic_campo_atributo['Municipio']='municipio__nombre'
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.dic_campo_atributo['Tipo']='tipoDeInstitucionProductiva__nombre'
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.dic_campo_metodo_filtrar['Producto']=lambda q,c:InstitucionProductiva.objects.filter(producto__in=Producto.objects.filter(nombre__icontains=q))
+REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.dic_campo_metodo_filtrar['TipoDeProducto']=lambda q,c:InstitucionProductiva.objects.filter(producto__in=Producto.objects.filter(tipoDeProducto__nombre__icontains=q))
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.claseResource=InstitucionProductivaResource
 
 
@@ -188,6 +189,7 @@ REPORTE_INSTITUCIONES_CIENTIFICA_PDF.dic_campo_atributo['Provincia']='provincia_
 REPORTE_INSTITUCIONES_CIENTIFICA_PDF.dic_campo_atributo['Municipio']='municipio__nombre'
 REPORTE_INSTITUCIONES_CIENTIFICA_PDF.dic_campo_atributo['Tipo']='tipoDeInstitucionCientifica__nombre'
 REPORTE_INSTITUCIONES_CIENTIFICA_PDF.dic_campo_atributo['Tecnologia']='tecnologias__nombre'
+REPORTE_INSTITUCIONES_CIENTIFICA_PDF.dic_campo_atributo['TipoDeTecnologia']='tecnologias__tipoDeTecnologia__nombre__icontains'
 #REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.dic_campo_metodo_filtrar['Tecnologia']=lambda q,c:InstitucionProductiva.objects.filter(producto__in=Tecnologia.objects.filter(nombre__icontains=q))
 REPORTE_INSTITUCIONES_CIENTIFICA_PDF.claseResource=InstitucionCientificaResource
 

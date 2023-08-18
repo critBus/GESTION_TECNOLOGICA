@@ -8,6 +8,8 @@ from django.utils.html import format_html
 from smart_selects.db_fields import ChainedForeignKey
 from solo.models import SingletonModel
 
+from django.core.exceptions import ValidationError
+
 from django.core.validators import RegexValidator
 from django.forms import TextInput
 from import_export import resources
@@ -75,11 +77,17 @@ class InstitucionProductiva(models.Model):
 
     TieneAlamacenConRefrigeracion=models.BooleanField(default=False
                                                       ,verbose_name="Tiene Refrigeración")
-    capacidadDeRefrigeracion = models.FloatField(verbose_name="Capacidad de refrigeración en KG")
+    capacidadDeRefrigeracion = models.FloatField(
+        verbose_name="Capacidad de refrigeración en KG",blank=True,null=True)
     descripcion = models.TextField(verbose_name="Descripción",blank=True,null=True)
 
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
+    def clean(self):
+        if self.TieneAlamacenConRefrigeracion:
+            if (not self.capacidadDeRefrigeracion) or self.capacidadDeRefrigeracion < 0:
+                raise ValidationError("La capacidad de refrigeración debe ser superior a 0")
+
     def __str__(self):
         return self.Nombre
 

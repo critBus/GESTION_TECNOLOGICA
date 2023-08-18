@@ -34,6 +34,7 @@ urlpatterns = [
     path('', view_home, name='home'),
     path('admin/', admin.site.urls),
     path('quienes_somos/', view_quienes_somos, name='quienes_somos'),
+    path('galeria/', view_galeria, name='galeria'),
     path('instituciones_tecnologicas/', InstitucionCientifica_ListView.as_view(), name='instituciones_tecnologicas'),
     path('instituciones_tecnologicas/findById/<int:pk>', InstitucionCientifica_DetailView.as_view()),
     path('instituciones_productivas/', InstitucionProductiva_ListView.as_view(), name='instituciones_productivas'),

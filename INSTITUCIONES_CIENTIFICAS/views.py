@@ -87,6 +87,8 @@ class InstitucionCientifica_ListView(generic.ListView):
                 queryset = queryset.filter(tipoDeInstitucionCientifica__nombre__icontains=q)
             elif campo=='Tecnologia':
                 queryset = queryset.filter(tecnologias__nombre__icontains=q)
+            elif campo=='TipoDeTecnologia':
+                queryset = queryset.filter(tecnologias__tipoDeTecnologia__nombre__icontains=q)
             else:
                 queryset = queryset.filter(Nombre__icontains=q)
         return queryset
@@ -97,6 +99,12 @@ class InstitucionCientifica_ListView(generic.ListView):
         context['config']=config
         context['lcp'] = lcp
         context['urlExportar'] = '/institucion_cientifica'
+
+        context['tipos'] = TipoDeInstitucionCientifica.objects.all()
+        context['tiposTecnologia'] = TipoDeTecnologia.objects.all()
+
+        context['provincias'] = Provincia.objects.all()
+        context['municipios'] = Municipio.objects.all().distinct("nombre")
         return context
 
 
@@ -148,6 +156,10 @@ class Tecnologia_ListView(generic.ListView):
         context['config']=config
         context['lcp'] = lcp
         context['urlExportar'] = '/tecnologia'
+
+        context['tipos'] = TipoDeTecnologia.objects.all()
+
+
         return context
 
 

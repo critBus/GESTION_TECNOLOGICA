@@ -1,0 +1,67 @@
+{% extends "visualCliente/padre_breadcrumbs.html" %}
+{% load static %}
+
+{% block titulo %}
+    Galeria
+{% endblock %}
+
+
+
+{% block contenido %}
+ <!-- ======= Our Projects Section ======= -->
+    <section id="projects" class="projects">
+      <div class="container" data-aos="fade-up">
+
+{#        <div class="section-header">#}
+{#          <h2>Our Projects</h2>#}
+{#          <p>Consequatur libero assumenda est voluptatem est quidem illum et officia imilique qui vel architecto#}
+{#            accusamus fugit aut qui distinctio</p>#}
+{#        </div>#}
+
+        <div class="portfolio-isotope" data-portfolio-filter="*" data-portfolio-layout="masonry"
+          data-portfolio-sort="original-order">
+
+          <ul class="portfolio-flters" data-aos="fade-up" data-aos-delay="100">
+            <li data-filter="*" class="filter-active">Todos</li>
+              {% for v in listaEtiquetasYTitulos %}
+            <li data-filter=".{{ v.tag }}">{{ v.tag_titulo }}</li>
+              {% endfor %}
+{#            <li data-filter=".filter-construction">Construction</li>#}
+{#            <li data-filter=".filter-repairs">Repairs</li>#}
+{#            <li data-filter=".filter-design">Design</li>#}
+          </ul><!-- End Projects Filters -->
+
+          <div class="row gy-4 portfolio-container" data-aos="fade-up" data-aos-delay="200">
+            {% for v in datos %}
+
+
+            <div class="col-lg-4 col-md-6 portfolio-item {{ v.tag }}">
+              <div class="portfolio-content h-100">
+                <img src="{{ v.Imagen.url }}" class="img-fluid" alt="">
+                <div class="portfolio-info">
+                  <h4>{{ v.tag_titulo  }}</h4>
+                  <p>{{ v.titulo }}</p>
+                  <a href="{{ v.Imagen.url }}" title="{{ v.titulo }}"
+                    data-gallery="portfolio-gallery-remodeling" class="glightbox preview-link"><i
+                      class="bi bi-zoom-in"></i></a>
+                  <a href="{{ v.url }}" title="Más Detalles" class="details-link"><i
+                      class="bi bi-link-45deg"></i></a>
+                </div>
+              </div>
+            </div><!-- End Projects Item -->
+            {% endfor %}
+
+          </div><!-- End Projects Container -->
+
+        </div>
+
+      </div>
+    </section><!-- End Our Projects Section -->
+
+
+{% endblock%}
+
+{% block scripts_extras %}
+
+
+{% endblock%}

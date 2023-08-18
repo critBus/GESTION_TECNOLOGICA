@@ -43,6 +43,7 @@ class Especie(models.Model):
         verbose_name = 'Especie'
         verbose_name_plural = 'Especies'
         app_label = 'INSTITUCIONES_CIENTIFICAS'
+        ordering=('nombreComun',)
     nombreCientifico = models.CharField(max_length=255,unique=True,verbose_name="Nombre Científico")
     nombreComun = models.CharField(max_length=255,verbose_name="Nombre Común")
     Imagen = models.ImageField(upload_to='Tecnologias', blank=True, null=True)
@@ -59,6 +60,8 @@ class Especie(models.Model):
     #tecnologias = models.ManyToManyField(Tecnologia)
     def __str__(self):
         return self.nombreComun
+
+
 
 class Tecnologia(models.Model):
     class Meta:
@@ -173,7 +176,7 @@ class InstitucionCientifica(models.Model):
                                                     , on_delete=models.CASCADE
                                                     ,verbose_name="Tipo")
 
-    tecnologias = models.ManyToManyField(Tecnologia)
+    tecnologias = models.ManyToManyField(Tecnologia)#,verbose_name="Tecnologias"
     descripcion = models.TextField(verbose_name="Descripción", blank=True, null=True)
     created=models.DateTimeField(auto_now_add=True)
     modified=models.DateTimeField(auto_now=True)

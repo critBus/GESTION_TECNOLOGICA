@@ -7,12 +7,12 @@
 
 
 
-{% block option_campos_select_filtros %}
-<option value="nombre">Nombre</option>
-<option value="Tipo">Tipo</option>
-<option value="Institución">Institución</option>
-
-{% endblock%}
+{#{% block option_campos_select_filtros %}#}
+{#<option value="nombre">Nombre</option>#}
+{#<option value="Tipo">Tipo</option>#}
+{#<option value="Institución">Institución</option>#}
+{##}
+{#{% endblock%}#}
 
 
 {% block contenido_lista %}
@@ -58,7 +58,19 @@
 
 
 {% empty %}
- <span>No se encontraron resultados.</span>
+<section id="about" class="about   w-100 ">
+      <div class="container" data-aos="fade-up">
+
+
+        <div class="row position-relative  ">
+
+                  <div class="col text-center" >
+                      <h1><b>No se encontraron resultados.</b></h1>
+                  </div>
+        </div>
+      </div>
+    </section>
+
 
 
 {% endfor %}
@@ -66,60 +78,18 @@
 {% endblock%}
 
 
-{% block scripts_extras %}
+{% block scripts_datos_filtros %}
 
 
+
+    FT.addT("nombre","Nombre");
+    FT.addP([
+        {% for v in tipos %}
+            {% if not forloop.first %},{% endif %}["{{ v }}","{{ v }}"]
+        {% endfor %}
+
+        ],"Tipo","Tipo")
+
+    FT.addT("Institución","Institución");
 {% endblock%}
 
-
-<!--<html xmlns="http://www.w3.org/1999/xhtml">-->
-<!--<head>-->
-<!--    <title></title>-->
-<!--</head>-->
-<!--<body>-->
-<!--    va a mostrar las palntillas <br />-->
-<!--    <form method="get">-->
-<!--        {% csrf_token %}-->
-<!--        <input type="text" name="q" placeholder="Buscar...">-->
-<!--        <select name="campo">-->
-<!--            <option value="Nombre">Nombre</option>-->
-<!--            <option value="NombreAbreviado">Abreviado</option>-->
-<!--        </select>-->
-<!--        <button type="submit">Buscar</button>-->
-<!--    </form>-->
-<!--     <form method="get" action="/reporte_institucion_productiva_pdf/">-->
-<!--        {% csrf_token %}-->
-<!--         {% if 'q' in request.GET and 'campo' in request.GET %}-->
-<!--        <input type="hidden" name="campo" value="{{request.GET.campo}}">-->
-<!--         <input type="hidden" name="q" value="{{request.GET.q}}">-->
-<!--         {% endif %}-->
-<!--        <button type="submit">Reporte pdf</button>-->
-<!--    </form>-->
-<!--    <br />-->
-<!--    {% for v in object_list %}-->
-<!--    {{v.Nombre}} -&#45;&#45; {{v.NombreAbreviado}} -->
-<!--    <a href="/instituciones_productivas/findById/{{v.id}}">ver libro</a> <br />-->
-
-<!--    {% empty %}-->
-<!--    <span>No se encontraron resultados.</span>-->
-
-
-<!--    {% endfor %}-->
-
-<!--    {% if is_paginated %}-->
-<!--    <div class="pagination">-->
-<!--        <span class="page-links">-->
-<!--            {% if page_obj.has_previous %}-->
-<!--            <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}{% if 'q' in request.GET and 'campo' in request.GET %}&campo={{ request.GET.campo }}&q={{ request.GET.q }}{% endif %}">previous</a>-->
-<!--            {% endif %}-->
-<!--            <span class="page-current">-->
-<!--                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.-->
-<!--            </span>-->
-<!--            {% if page_obj.has_next %}-->
-<!--            <a href="{{ request.path }}?page={{ page_obj.next_page_number }}{% if 'q' in request.GET and 'campo' in request.GET %}&campo={{ request.GET.campo }}&q={{ request.GET.q }}{% endif %}">next</a>-->
-<!--            {% endif %}-->
-<!--        </span>-->
-<!--    </div>-->
-<!--    {% endif %}-->
-<!--</body>-->
-<!--</html>-->

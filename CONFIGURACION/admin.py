@@ -29,10 +29,16 @@ class AdminImageWidget(AdminFileWidget):
         output.append(super(AdminFileWidget, self).render(name, value, attrs))
         return mark_safe(u''.join(output))
 
+from  django.forms.models import ModelMultipleChoiceField
+
+
+
 
 STYLES_FORMFIELDS={models.ImageField: {'widget': AdminImageWidget},#ImageUploaderWidget
                            models.TextField: {'widget': CKEditorWidget},
-                           models.CharField: {'widget': TextInput(attrs={"size": "100"})}
+                           models.CharField: {'widget': TextInput(attrs={"size": "100"})},
+
+
                            }
 
 class Informacion_PrincipalInline(NestedStackedInline):#admin.TabularInline

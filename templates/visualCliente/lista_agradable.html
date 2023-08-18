@@ -17,16 +17,37 @@
         <div class="col-10 ">
 
 
-            <form method="get" class=" ">
+            <form  id="idFormuarioGET" method="get" class=" ">
                 {% csrf_token %}
 
+                <input id="idHidden_campo" type="hidden" name="campo" />
+                <input id="idHidden_q" type="hidden" name="q" />
+            </form>
                     <div class="row gy-4">
                         <div class="col-lg-10 form-group">
 
+{#                            <div class="input-group">#}
+{##}
+{#                                <input type="text" name="q" class="form-control" style="width: 70%;" id="name" placeholder="Busqueda" required>#}
+{#                                <select name="campo" class="form-select">#}
+{#                                    {% block option_campos_select_filtros %}{% endblock%}#}
+{##}
+{#                                </select>#}
+{#                            </div>#}
+
                             <div class="input-group">
-                                <input type="text" name="q" class="form-control" style="width: 70%;" id="name" placeholder="Busqueda" required>
-                                <select name="campo" class="form-select">
-                                    {% block option_campos_select_filtros %}{% endblock%}
+                            <select id="idValor_select"
+                                name="campo2" style="width: 55%;"
+                                    class="form-select">
+                                    <option value="nombreCientifico">Científico</option>
+                                    <option value="nombreComun">Común</option>
+                                    <option value="tipoDeEspecie">Tipo</option>
+
+                                </select>
+                                <input  id="idValor_text" type="text" name="q2" class="form-control"
+                                        style="width: 55%;" id="name" placeholder="Busqueda" required>
+                                <select id="idCampoABuscar" name="campo" class="form-select">
+
 
                                 </select>
                             </div>
@@ -35,13 +56,13 @@
 
                         <div class="col-lg-2 form-group d-flex justify-content-center">
 
-                            <button type="submit" class="btn"><i class="bi bi-search text-light"></i></button>
+                            <button id="idBoton" type="submit" class="btn"><i class="bi bi-search text-light"></i></button>
                         </div>
                     </div>
 
 
 
-            </form>
+
 
 
         </div>
@@ -143,6 +164,266 @@
 {% endblock%}
 
 {% block scripts_extras %}
+
+    <script>
+
+
+
+        class ParValor{
+            constructor(valor,titulo){
+                this.valor=valor;
+                this.titulo=titulo;
+            }
+        }
+
+        class SubFiltroParValor{
+            constructor(parValor){
+                this.lista=[];
+                this.indiceSeleccionado=0;
+                this.id_select="";
+                this.parValor=parValor;
+            }
+            add(valor,titulo) {
+                this.lista.push(new ParValor(valor,titulo));
+            }
+            llenar_Select(){
+                const select=document.getElementById(this.id_select);
+                select.innerHTML='';
+                for (let i = 0; i < this.lista.length; i++) {
+                    const v = this.lista[i];
+
+                    const opcion=document.createElement('option');
+                    opcion.value=v.valor;
+                    opcion.textContent=v.titulo;
+                    select.appendChild(opcion);
+                }
+
+                select.selectedIndex=this.indiceSeleccionado;
+            }
+            setIndiceSeleccionado(indice){
+                this.indiceSeleccionado=indice;
+            }
+        }
+        class SubFiltroTexto{
+            constructor(parValor){
+                this.texto="";
+                this.parValor=parValor;
+            }
+        }
+        class Filtro{
+            constructor(subFiltro,parValor){
+                this.subFiltro=subFiltro;
+                this.parValor=parValor;
+            }
+        }
+
+        class Filtrador{
+            constructor(){
+                this.lista=[];
+                this.indiceSeleccionado=0;
+                this.id_select_campo;
+
+                this.id_text_valor;
+                this.id_select_valor;
+
+            }
+            addT(campo,titulo){
+                let pv=new ParValor(campo,titulo);
+                this.lista.push(new Filtro(new SubFiltroTexto(pv),pv));
+            }
+            addP(listaParValorTitulo,campo,titulo){
+                let pv=new ParValor(campo,titulo);
+                const fv=new SubFiltroParValor(pv);
+                for (let i = 0; i < listaParValorTitulo.length; i++) {
+                    const v = listaParValorTitulo[i];
+
+                    fv.add(v[0],v[1]);
+                }
+
+                this.lista.push(new Filtro(fv,pv));
+            }
+            llenar_Select(){
+                const select=document.getElementById(this.id_select_campo);
+                select.innerHTML='';
+                for (let i = 0; i < this.lista.length; i++) {
+                    const v = this.lista[i];
+
+                    const opcion=document.createElement('option');
+                    let pv=v.parValor;
+                    opcion.value=pv.valor;
+                    opcion.textContent=pv.titulo;
+                    select.appendChild(opcion);
+                }
+
+
+            }
+            getFiltroActual(){
+                return this.lista[this.indiceSeleccionado];
+            }
+            setSeleccionado(indice){
+                this.indiceSeleccionado=indice;
+            }
+            actualizarFiltroVisualActual(){
+                const text_valor=document.getElementById(this.id_text_valor);
+
+                let filtroActual=this.getFiltroActual();
+                let subFiltro=filtroActual.subFiltro;
+
+                let esSelect=subFiltro instanceof SubFiltroParValor;
+
+                if(esSelect){
+                    subFiltro.id_select=this.id_select_valor;
+                    subFiltro.llenar_Select();
+                }else{
+                    text_valor.value=subFiltro.texto;
+                }
+
+                mostrarOcultarElemento(this.id_select_valor,esSelect);
+                mostrarOcultarElemento(this.id_text_valor,!esSelect);
+            }
+        }
+
+        function addOnChange_Select(id,metodo){//(v,i)=>{}
+            const select=document.getElementById(id);
+            select.onchange=function() {
+                const valorSeleccionado=this.value;
+                const indiceSeleccionado=this.selectedIndex;
+                metodo(valorSeleccionado,indiceSeleccionado);
+            }
+        }
+
+        function llenar_Select_subFiltroParValor(id,subFiltroParValor){
+            const select=document.getElementById(id);
+            select.innerHTML='';
+            for (let i = 0; i < subFiltroParValor.lista.length; i++) {
+                    const v = subFiltroParValor[i];
+
+                    const opcion=document.createElement('option');
+                    opcion.value=v.valor;
+                    opcion.textContent=v.titulo;
+                    select.appendChild(opcion);
+                }
+
+        }
+        function mostrarOcultarElemento(id,mostrar){
+            const elemento=document.getElementById(id);
+            if(mostrar){
+                elemento.style.display='block';
+            }else{
+                elemento.style.display='none';
+            }
+        }
+
+        function setActualizar_Valor(
+            filtrador
+            ){
+            const id_text_valor=filtrador.id_text_valor;
+            const id_select_valor=filtrador.id_select_valor;
+            const id_select_campo=filtrador.id_select_campo;
+
+            const select_valor=document.getElementById(id_select_valor);
+            const text_valor=document.getElementById(id_text_valor);
+            const select_campo=document.getElementById(id_select_campo);
+
+            addOnChange_Select(id_select_campo,(v,i)=>{
+
+                let filtroAnterior=filtrador.getFiltroActual();
+                let subFiltroAnterior=filtroAnterior.subFiltro;
+
+                if(subFiltroAnterior instanceof SubFiltroParValor){
+                    subFiltroAnterior.setIndiceSeleccionado(select_valor.selectedIndex);
+
+                }else{
+                    subFiltroAnterior.texto=text_valor.value;
+
+                }
+
+
+                filtrador.setSeleccionado(i);
+                filtrador.actualizarFiltroVisualActual();
+
+
+
+
+            });
+        }
+
+        function establecerValores(filtrador){
+            filtrador.llenar_Select();
+            filtrador.actualizarFiltroVisualActual();
+        }
+
+        const FT=new Filtrador();
+        FT.id_select_campo="idCampoABuscar";
+        FT.id_select_valor="idValor_select";
+        FT.id_text_valor="idValor_text";
+
+        {% block scripts_datos_filtros %}{% endblock %}
+
+        {#FT.addT("asd","Asd");#}
+        {#FT.addP([#}
+        {#    ["a","A"]#}
+        {#    ,["b","B"]#}
+        {#    ,["c","C"]#}
+        {#    ,["d","D"]#}
+        {#    ,["e","E"]#}
+        {#],"0asd","0Asd")#}
+        {#FT.addT("qwe","Qwe");#}
+        {#FT.addP([#}
+        {#    ["a0","A0"]#}
+        {#    ,["b0","B0"]#}
+        {#    ,["c0","C0"]#}
+        {#    ,["d0","D0"]#}
+        {#    ,["e0","E0"]#}
+        {#],"0qwe","0Qwe")#}
+        {#FT.addT("zxc","0zxc");#}
+        {#FT.addT("123","0123");#}
+        {#FT.addP([#}
+        {#    ["a1","A1"]#}
+        {#    ,["b1","B1"]#}
+        {#    ,["c1","C1"]#}
+        {#    ,["d1","D1"]#}
+        {#    ,["e1","E1"]#}
+        {#],"1zxc","1zxc");#}
+
+        establecerValores(FT);
+        setActualizar_Valor(FT);
+
+        ID_BOTON="idBoton";
+        ID_FORMULARIO="idFormuarioGET";
+        ID_HIDEN_CAMPO="idHidden_campo";
+        ID_HIDEN_Q="idHidden_q";
+
+        const boton=document.getElementById(ID_BOTON);
+        const formualario=document.getElementById(ID_FORMULARIO);
+        boton.addEventListener('click',e=>{
+            e.preventDefault();
+
+            let filtroAnterior=FT.getFiltroActual();
+            let subFiltroAnterior=filtroAnterior.subFiltro;
+
+            const id_text_valor=FT.id_text_valor;
+            const id_select_valor=FT.id_select_valor;
+            const id_select_campo=FT.id_select_campo;
+
+            const select_valor=document.getElementById(id_select_valor);
+            const text_valor=document.getElementById(id_text_valor);
+            const select_campo=document.getElementById(id_select_campo);
+
+
+            let valor=subFiltroAnterior instanceof SubFiltroTexto? text_valor.value:select_valor.value;
+            let campo=select_campo.value;
+
+            const form_campo=document.getElementById(ID_HIDEN_CAMPO);
+            const form_q=document.getElementById(ID_HIDEN_Q);
+
+            form_campo.value=campo;
+            form_q.value=valor;
+
+            formualario.submit();
+        });
+
+    </script>
 
 
 {% endblock%}

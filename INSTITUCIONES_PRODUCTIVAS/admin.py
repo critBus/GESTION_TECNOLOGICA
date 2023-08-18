@@ -78,7 +78,7 @@ class InstitucionProductivaAdmin(ImportExportActionModelAdmin):#admin.ModelAdmin
     actions = [REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.getAction()]
     list_display = ('Nombre', 'NombreAbreviado', 'tipoDeInstitucionProductiva', 'provincia', 'municipio')
     search_fields = ('Nombre', 'NombreAbreviado', 'tipoDeInstitucionProductiva__nombre', 'provincia__nombre', 'municipio__nombre')
-    list_filter = ('tipoDeInstitucionProductiva', 'provincia', 'municipio')
+    list_filter = ('tipoDeInstitucionProductiva', 'provincia', 'municipio')#,'producto_set__tipoDeProducto__nombre'
     ordering = ('Nombre', 'tipoDeInstitucionProductiva', 'provincia', 'municipio')
     date_hierarchy = 'created'
     def get_form(self, request, obj=None, change=False, **kwargs):

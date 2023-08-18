@@ -71,6 +71,9 @@ class InstitucionProductiva_ListView(generic.ListView):
             elif campo=='Producto':
                 queryset = Producto.objects.filter(nombre__icontains=q)
                 queryset = InstitucionProductiva.objects.filter(producto__in=queryset)
+            elif campo=='TipoDeProducto':
+                queryset = Producto.objects.filter(tipoDeProducto__nombre__icontains=q)
+                queryset = InstitucionProductiva.objects.filter(producto__in=queryset)
             else:
                 queryset = queryset.filter(Nombre__icontains=q)
         return queryset
@@ -81,6 +84,13 @@ class InstitucionProductiva_ListView(generic.ListView):
         context['config']=config
         context['lcp'] = lcp
         context['urlExportar'] = '/institucion_productiva'
+
+        context['tipos'] = TipoDeInstitucionProductiva.objects.all()
+        context['tiposProductos'] = TipoDeProducto.objects.all()
+
+        context['provincias'] = Provincia.objects.all()
+        context['municipios'] = Municipio.objects.all().distinct("nombre")
+
         return context
 
 
@@ -125,6 +135,7 @@ class Producto_ListView(generic.ListView):
         context['config']=config
         context['lcp'] = lcp
         context['urlExportar'] = '/productos'
+        context['tipos']=TipoDeProducto.objects.all()
         return context
 
 
