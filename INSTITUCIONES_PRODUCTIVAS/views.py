@@ -89,7 +89,15 @@ class InstitucionProductiva_ListView(generic.ListView):
         context['tiposProductos'] = TipoDeProducto.objects.all()
 
         context['provincias'] = Provincia.objects.all()
-        context['municipios'] = Municipio.objects.all().distinct("nombre")
+        context['municipios'] = Municipio.objects.all()#.distinct("nombre")
+
+        lista = self.get_queryset()  # self.queryset#context['object_list']
+
+        context['listaPuntos'] = [{
+            "latitud": v.latitud
+            , "longitud": v.longitud
+            , "textoAMostrar": v.NombreAbreviado
+        } for v in lista]
 
         return context
 
@@ -105,7 +113,26 @@ class InstitucionProductiva_DetailView(generic.DetailView):
 
         return context
 
+class InstitucionYProductos:
+    def __init__(self,institucion):
+        self.institucion=institucion
+        self.productos=[]
+        self.ln=[]
+    def add(self,p:Producto):
+        if not p.nombre in self.ln:
+            self.ln.append(p.nombre)
+            self.productos.append(p)
 
+class InstitucionesYProductos:
+    def __init__(self):
+        self.institucionesYProductos:Dict[InstitucionYProductos]={}
+
+
+    def add(self,p:Producto):
+        ni=p.institucionProductiva.Nombre
+        if not ni in self.institucionesYProductos:
+            self.institucionesYProductos[ni]=InstitucionYProductos(p.institucionProductiva)
+        self.institucionesYProductos[ni].add(p)
 
 class Producto_ListView(generic.ListView):
     model = Producto
@@ -136,6 +163,31 @@ class Producto_ListView(generic.ListView):
         context['lcp'] = lcp
         context['urlExportar'] = '/productos'
         context['tipos']=TipoDeProducto.objects.all()
+
+        lista = self.get_queryset()  # self.queryset#context['object_list']
+
+        IP=InstitucionesYProductos()
+        for p in lista:
+            IP.add(p)
+
+        L=[]
+        for v in IP.institucionesYProductos:
+            ip=IP.institucionesYProductos[v]
+            L.append({
+            "latitud": ip.institucion.latitud
+            , "longitud": ip.institucion.longitud
+            , "textoAMostrar": ip.institucion.NombreAbreviado + " | " + " | ".join([j.nombre for j in ip.productos])
+            # +" | "+
+        })
+
+
+        context['listaPuntos'] = L
+        #     [{
+        #     "latitud": v.latitud
+        #     , "longitud": v.longitud
+        #     , "textoAMostrar": v.NombreAbreviado + " | " + " | ".join([j.nombre for j in v.tecnologias.all()])
+        #     # +" | "+
+        # } for v in IP.institucionesYProductos]
         return context
 
 

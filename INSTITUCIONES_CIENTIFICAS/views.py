@@ -104,7 +104,15 @@ class InstitucionCientifica_ListView(generic.ListView):
         context['tiposTecnologia'] = TipoDeTecnologia.objects.all()
 
         context['provincias'] = Provincia.objects.all()
-        context['municipios'] = Municipio.objects.all().distinct("nombre")
+        context['municipios'] = Municipio.objects.all()#.distinct("nombre")
+
+        lista=self.get_queryset()#self.queryset#context['object_list']
+
+        context['listaPuntos'] =[{
+            "latitud":v.latitud
+            ,"longitud":v.longitud
+            ,"textoAMostrar":v.NombreAbreviado
+        } for v in lista]
         return context
 
 
@@ -159,6 +167,17 @@ class Tecnologia_ListView(generic.ListView):
 
         context['tipos'] = TipoDeTecnologia.objects.all()
 
+        lista = self.get_queryset()  # self.queryset#context['object_list']
+
+        listaI =InstitucionCientifica.objects.filter(
+            tecnologias__in=lista)
+
+
+        context['listaPuntos'] = [{
+            "latitud": v.latitud
+            , "longitud": v.longitud
+            , "textoAMostrar": v.NombreAbreviado+" | "+" | ".join([j.nombre for j in v.tecnologias.all()]) #+" | "+
+        } for v in listaI]
 
         return context
 
@@ -205,6 +224,28 @@ class Especie_ListView(generic.ListView):
         context['config']=config
         context['lcp'] = lcp
         context['urlExportar'] = '/especie'
+
+        lista = self.get_queryset()  # self.queryset#context['object_list']
+
+        listaT = Tecnologia.objects.filter(
+            especies__in=lista)
+
+        listaI = InstitucionCientifica.objects.filter(
+            tecnologias__in=listaT)
+        def getListaNombre(institucion:InstitucionCientifica):
+
+            ln=[]
+            for t in institucion.tecnologias.all():
+                for e in t.especies.all():
+                    if not e.nombreCientifico in ln:
+                        ln.append(e.nombreCientifico)
+            return ln
+        context['listaPuntos'] = [{
+            "latitud": v.latitud
+            , "longitud": v.longitud
+            , "textoAMostrar": v.NombreAbreviado + " | " + " | ".join(getListaNombre(v))
+            # +" | "+
+        } for v in listaI]
 
         return context
 

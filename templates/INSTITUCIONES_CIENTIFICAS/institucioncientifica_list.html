@@ -1,6 +1,6 @@
 {% extends "visualCliente/lista_agradable.html" %}
 {% load static %}
-
+{% load poll_extras %}
 {% block titulo %}
     Instituciones Científicas
 {% endblock %}
@@ -93,6 +93,14 @@
 {% endfor %}
 
 {% endblock%}
+{##}
+{#{% block scripts_agregar_puntos %}#}
+{#       <script>#}
+{#           {% for punto in listaPuntos %}#}
+{#       LM.add({{ punto.latitud|numeroConComa}},{{ punto.longitud|numeroConComa }},"{{ punto.textoAMostrar }}");#}
+{#           {% endfor %}#}
+{#       </script>#}
+{#    {% endblock%}#}
 
 
 {% block scripts_datos_filtros %}

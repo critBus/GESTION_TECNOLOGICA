@@ -47,6 +47,8 @@ class TipoDeProducto(models.Model):
 
 VALIDADOR_CAPACIDAD_PRODUCTOS=MinValueValidator(limit_value=1,message="La capacidad de productos debe de ser superior a 1 ")
 
+#from djgeojson.fields import PointField
+
 class InstitucionProductiva(models.Model):
     class Meta:
         verbose_name = 'Institución Productiva'
@@ -54,6 +56,8 @@ class InstitucionProductiva(models.Model):
 
     Nombre = models.CharField(max_length=255, unique=True)
     NombreAbreviado  = models.CharField(max_length=255, unique=True,verbose_name="Abreviado")
+    latitud = models.FloatField(verbose_name="Latitud")
+    longitud = models.FloatField(verbose_name="Longitud")
     Imagen = models.ImageField(upload_to='InstitucionProductiva',blank=True,null=True)
     Contacto = models.CharField(max_length=255,validators=[VALIDADOR_NOMBRE])
     Telefono = models.CharField(max_length=255,validators=[VALIDADOR_TELEFONO])
@@ -80,6 +84,8 @@ class InstitucionProductiva(models.Model):
     capacidadDeRefrigeracion = models.FloatField(
         verbose_name="Capacidad de refrigeración en KG",blank=True,null=True)
     descripcion = models.TextField(verbose_name="Descripción",blank=True,null=True)
+
+
 
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)

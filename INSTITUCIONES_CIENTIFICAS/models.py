@@ -157,6 +157,10 @@ class InstitucionCientifica(models.Model):
     # location=models.PointField(blank=True,null=True)
     Nombre = models.CharField(max_length=255, unique=True)
     NombreAbreviado  = models.CharField(max_length=255, unique=True,verbose_name="Abreviado")
+
+    latitud = models.FloatField(verbose_name="Latitud")
+    longitud=models.FloatField(verbose_name="Longitud")
+
     Imagen = models.ImageField(upload_to='InstitucionCientifica',blank=True,null=True)
     Contacto = models.CharField(max_length=255,validators=[VALIDADOR_NOMBRE])
     Telefono = models.CharField(max_length=255,validators=[VALIDADOR_TELEFONO])
