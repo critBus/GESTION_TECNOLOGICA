@@ -1,4 +1,4 @@
-{% extends "visualCliente/padre_breadcrumbs.html" %}
+{% extends "visualCliente/con_mapa_provincia.html" %}
 {% load static %}
 
 {% block titulo %}
@@ -70,6 +70,27 @@
                 </form>
               </div>-->
                 <!-- End sidebar search formn-->
+
+                <div class="sidebar-item categories">
+                <h3 class="sidebar-title">Ubicación</h3>
+                   <div class="mt-3" id="chartdiv" style="
+                width: 100%;
+            height: 100px;">
+
+                </div>
+                <ul class="mt-3">
+                  <li><i class="bi bi-signpost"></i><b> Provicia:</b> {{object.institucionProductiva.provincia.nombre}}<br/></li>
+                    <li><i class="bi bi-signpost"></i><b> Municipio:</b> {{object.institucionProductiva.municipio.nombre}}<br/></li>
+                    <li><i class="bi bi-signpost-split"></i><b> Dirección:</b> {{object.institucionProductiva.Direccion}}<br/></li>
+
+
+
+
+
+                </ul>
+              </div>
+
+
               <div class="sidebar-item categories">
                 <h3 class="sidebar-title">Características</h3>
                 <ul class="mt-3">
@@ -83,19 +104,6 @@
               </ul>
               </div>
 
-              <div class="sidebar-item categories">
-                <h3 class="sidebar-title">Ubicación</h3>
-                <ul class="mt-3">
-                  <li><i class="bi bi-signpost"></i><b> Provicia:</b> {{object.institucionProductiva.provincia.nombre}}<br/></li>
-                    <li><i class="bi bi-signpost"></i><b> Municipio:</b> {{object.institucionProductiva.municipio.nombre}}<br/></li>
-                    <li><i class="bi bi-signpost-split"></i><b> Dirección:</b> {{object.institucionProductiva.Direccion}}<br/></li>
-
-
-
-
-
-                </ul>
-              </div>
               <div class="sidebar-item categories">
                 <h3 class="sidebar-title">Contacto</h3>
                 <ul class="mt-3">

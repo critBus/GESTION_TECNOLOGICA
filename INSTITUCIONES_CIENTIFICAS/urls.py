@@ -9,4 +9,5 @@ from .views import *
 
 urlpatterns = [
     path('rellenar_instituciones_cientificas/',rellenar_instituciones_cientifica, name="rellenar_instituciones_cientificas"),
+path('rellenar_provincias/',rellenar_provincias, name="rellenar_provincias"),
 ]

@@ -1,0 +1,127 @@
+{% extends "visualCliente/padre_breadcrumbs.html" %}
+{% load static %}
+{% load poll_extras %}
+
+{% block scripts_extras_dos %}
+
+
+    <script src="{% static 'lib/amcharts5/index.js' %}"></script>
+<script src="{% static 'lib/amcharts5/map.js' %}"></script>
+<script src="{% static 'lib/amcharts5/themes/Animated.js' %}"></script>
+    <script src="{% static 'lib/amcharts5/geodata/cubaHigh.js' %}"></script>
+
+    <script>
+    class PuntoEnElMapa{
+        constructor(latitud,longitud,textoAMostrar){
+            this.latitud=latitud;
+            this.longitud=longitud;
+            this.textoAMostrar=textoAMostrar;
+        }
+    }
+    class ListaDeDatosMapa{
+        constructor(){
+            this.lista=[];
+        }
+        add(latitud,longitud,textoAMostrar){
+            this.lista.push(new PuntoEnElMapa(latitud,longitud,textoAMostrar))
+        }
+    }
+
+    const LM=new ListaDeDatosMapa();
+
+
+
+     {% for punto in listaPuntos %}
+       LM.add({{ punto.latitud|numeroConComa}},{{ punto.longitud|numeroConComa }},"{{ punto.textoAMostrar }}");
+           {% endfor %}
+
+</script>
+
+{% block scripts_extras_para_modificar_mapa %}
+    {% endblock %}
+<script>
+
+
+listaDatos=[];
+for (let i = 0; i < LM.lista.length; i++) {
+    const e = LM.lista[i];
+    listaDatos.push(
+        {
+    "type": "Feature",
+    "properties": {
+      "name": e.textoAMostrar//"otra2"
+      ,"value":e.textoAMostrar//"valor"
+    },
+    "geometry": {
+      "type": "Point",//longitud latitud
+      "coordinates": [
+      e.longitud//-81.905378
+      ,e.latitud//  , 23.057232
+    ]
+    },
+
+  }
+    );
+}
+
+
+// GeoJSON data
+var cities = {
+  "type": "FeatureCollection",
+  "features": listaDatos
+
+
+};
+
+var root = am5.Root.new("chartdiv");
+
+// Set themes
+root.setThemes([
+  am5themes_Animated.new(root)
+]);
+
+// Create chart
+var chart = root.container.children.push(
+  am5map.MapChart.new(root, {
+    panX: "rotateX",
+    panY: "rotateY",
+    projection: am5map.geoNaturalEarth1()
+  })
+);
+
+// Create polygon series
+var polygonSeries = chart.series.push(
+  am5map.MapPolygonSeries.new(root, {
+    geoJSON:{% block script_mapa_actual %} window.am5geodata_cubaHigh {% endblock %},
+    exclude: ["AQ"]
+
+    // ,interactive: true
+  })
+);
+
+
+
+// Create point series
+var pointSeries = chart.series.push(
+  am5map.MapPointSeries.new(root, {
+    geoJSON: cities
+  })
+);
+
+pointSeries.bullets.push(function() {
+  return am5.Bullet.new(root, {
+    sprite: am5.Circle.new(root, {
+      radius: 5,
+      fill: am5.color(0xffba00)
+      , tooltipText: "{name}"//"{name}: {value}"
+    })
+  });
+});
+
+chart.set("zoomControl", am5map.ZoomControl.new(root, {}));
+
+
+</script>
+
+
+{% endblock%}

@@ -1,4 +1,4 @@
-{% extends "visualCliente/padre_breadcrumbs.html" %}
+{% extends "visualCliente/con_puntos_en_mapa.html" %}
 {% load static %}
 
 {% block titulo %}
@@ -35,6 +35,12 @@
 
                 </ul>
               </div><!-- End meta top -->
+
+            <div class="meta-top" id="chartdiv" style="
+                width: 100%;
+            height: 300px;">
+
+                </div>
 
               <div class="content">
                 <h3>{{object.nombreComun}}</h3>

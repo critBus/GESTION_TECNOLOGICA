@@ -7,6 +7,7 @@ import os
 from django.views import generic
 from GESTION_TECNOLOGICA.Utiles.LocalizacionDePagina import *
 import random
+
 def rellenar_instituciones_cientifica(request):
     class LT:
         def __init__(self):
@@ -59,6 +60,19 @@ def rellenar_instituciones_cientifica(request):
 
     return JsonResponse({'status': 'ok'}, status=200)
 
+
+
+def rellenar_provincias(request):
+    lp=["Santiago de Cuba" , "Granma" , "Cienfuegos" , "Pinar del Río" , "Artemisa" , "La Habana" , "Mayabeque" , "Las Tunas" , "Matanzas" , "Villa Clara" , "Sancti Spíritus" , "Isla de la Juventud" , "Holguín" , "Ciego de Ávila" , "Camagüey" , "Guantánamo"]
+
+    for p in lp:
+        if not Provincia.objects.filter(nombre=p).exists():
+            n=Provincia()
+            n.nombre=p
+            n.save()
+
+
+    return JsonResponse({'status': 'ok'}, status=200)
 
 
 
@@ -124,7 +138,13 @@ class InstitucionCientifica_DetailView(generic.DetailView):
         lcp = LocalizacionDePagina("Instituciones","Detalles", "Institucion Científica")
         context['config']=config
         context['lcp'] = lcp
-
+        dato=context['object']
+        context['listaPuntos'] = [{
+            "latitud": v.latitud
+            , "longitud": v.longitud
+            , "textoAMostrar": v.NombreAbreviado
+        } for v in [dato]]
+        context['nombreProvincia'] = dato.provincia.nombre
         return context
 
 
@@ -190,7 +210,20 @@ class Tecnologia_DetailView(generic.DetailView):
         lcp = LocalizacionDePagina("Servicios","Detalles", "Tipo De Tecnología")
         context['config']=config
         context['lcp'] = lcp
-        context['industrias'] = InstitucionCientifica.objects.filter(tecnologias=context['object'])
+        tecno=context['object']
+
+        listaI =InstitucionCientifica.objects.filter(tecnologias=tecno)
+        context['industrias'] = listaI
+
+
+
+
+        context['listaPuntos'] = [{
+            "latitud": v.latitud
+            , "longitud": v.longitud
+            , "textoAMostrar": v.NombreAbreviado + " | " + " | ".join([j.nombre for j in v.tecnologias.all()])
+            # +" | "+
+        } for v in listaI]
 
         return context
 
@@ -258,7 +291,29 @@ class Especie_DetailView(generic.DetailView):
         lcp = LocalizacionDePagina("Servicios","Detalles", "Tipo De Especie")
         context['config']=config
         context['lcp'] = lcp
-        context['industrias'] = InstitucionCientifica.objects.filter(
+
+        listaI =InstitucionCientifica.objects.filter(
             tecnologias__in=Tecnologia.objects.filter(especies=context['object']))
+        context['industrias'] = listaI
+
+
+
+
+
+        def getListaNombre(institucion: InstitucionCientifica):
+
+            ln = []
+            for t in institucion.tecnologias.all():
+                for e in t.especies.all():
+                    if not e.nombreCientifico in ln:
+                        ln.append(e.nombreCientifico)
+            return ln
+
+        context['listaPuntos'] = [{
+            "latitud": v.latitud
+            , "longitud": v.longitud
+            , "textoAMostrar": v.NombreAbreviado + " | " + " | ".join(getListaNombre(v))
+            # +" | "+
+        } for v in listaI]
 
         return context

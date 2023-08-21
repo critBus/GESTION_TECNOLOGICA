@@ -111,6 +111,15 @@ class InstitucionProductiva_DetailView(generic.DetailView):
         context['config']=config
         context['lcp'] = lcp
 
+        dato=context['object']
+        context['listaPuntos'] = [{
+            "latitud": v.latitud
+            , "longitud": v.longitud
+            , "textoAMostrar": v.NombreAbreviado
+        } for v in [dato]]
+
+        context['nombreProvincia']=dato.provincia.nombre
+
         return context
 
 class InstitucionYProductos:
@@ -199,5 +208,14 @@ class Producto_DetailView(generic.DetailView):
         lcp = LocalizacionDePagina("Servicios","Detalles", "Productos")
         context['config']=config
         context['lcp'] = lcp
+
+        dato = context['object'].institucionProductiva
+        context['listaPuntos'] = [{
+            "latitud": v.latitud
+            , "longitud": v.longitud
+            , "textoAMostrar": v.NombreAbreviado
+        } for v in [dato]]
+
+        context['nombreProvincia'] = dato.provincia.nombre
 
         return context
