@@ -26,16 +26,27 @@
                     <div class="row gy-4">
                         <div class="col-lg-10 form-group">
 
-{#                            <div class="input-group">#}
-{##}
-{#                                <input type="text" name="q" class="form-control" style="width: 70%;" id="name" placeholder="Busqueda" required>#}
-{#                                <select name="campo" class="form-select">#}
-{#                                    {% block option_campos_select_filtros %}{% endblock%}#}
-{##}
-{#                                </select>#}
-{#                            </div>#}
 
                             <div class="input-group">
+
+                                 <select id="idValor_select_multiple_secundario"
+                    name="campo_multiple_secundario" style="width: 35%;"
+                            class="form-select">
+                            <option value="nombreCientifico">uno</option>
+                            <option value="nombreComun">dos</option>
+                            <option value="tipoDeEspecie">tres</option>
+
+                        </select>
+                        <select id="idValor_select_multiple_principipal"
+                    name="campo_multiple_principal" style="width: 35%;"
+                            class="form-select">
+                            <option value="nombreCientifico">Científico</option>
+                            <option value="nombreComun">Común</option>
+                            <option value="tipoDeEspecie">Tipo</option>
+
+                        </select>
+
+
                             <select id="idValor_select"
                                 name="campo2" style="width: 55%;"
                                     class="form-select">
@@ -198,7 +209,9 @@
                 this.parValor=parValor;
             }
             add(valor,titulo) {
-                this.lista.push(new ParValor(valor,titulo));
+                let pv=new ParValor(valor,titulo);
+                this.lista.push(pv);
+                return pv;
             }
             llenar_Select(){
                 const select=document.getElementById(this.id_select);
@@ -211,13 +224,39 @@
                     opcion.textContent=v.titulo;
                     select.appendChild(opcion);
                 }
-
+                // this.lista.forEach(v => {
+                //     const opcion=document.createElement('option');
+                //     opcion.value=v.valor;
+                //     opcion.textContent=v.titulo;
+                // });
                 select.selectedIndex=this.indiceSeleccionado;
             }
             setIndiceSeleccionado(indice){
                 this.indiceSeleccionado=indice;
             }
+            getValorActual(){
+                return this.lista[this.indiceSeleccionado].valor;
+            }
         }
+
+        class SubFiltroSelecDependientes{
+                constructor(){
+                    this.subFiltroParValor_principal;
+                    this.dic_subFiltroParValor_secundario;
+
+                }
+                llenar_Select_principal(){
+                    this.subFiltroParValor_principal.llenar_Select();
+                }
+                llenar_Select_secundario(){
+                    let key=this.subFiltroParValor_principal.getValorActual();
+                    //new Map()
+                    let subFiltroParValor_secundario=this.dic_subFiltroParValor_secundario.get(key);
+                    subFiltroParValor_secundario.llenar_Select();
+                }
+
+        }
+
         class SubFiltroTexto{
             constructor(parValor){
                 this.texto="";
@@ -240,10 +279,14 @@
                 this.id_text_valor;
                 this.id_select_valor;
 
+                this.id_select_valor_multiple_principal;
+                this.id_select_valor_multiple_secundario;
+
             }
             addT(campo,titulo){
                 let pv=new ParValor(campo,titulo);
                 this.lista.push(new Filtro(new SubFiltroTexto(pv),pv));
+                return pv;
             }
             addP(listaParValorTitulo,campo,titulo){
                 let pv=new ParValor(campo,titulo);
@@ -255,6 +298,33 @@
                 }
 
                 this.lista.push(new Filtro(fv,pv));
+            }
+            addM(listaDosNiveles_ParValorTitulo,campo,titulo){
+                let listaParValorTitulo=listaDosNiveles_ParValorTitulo;
+                let pv=new ParValor(campo,titulo);
+                const sfsd=new SubFiltroSelecDependientes();
+                const fv=new SubFiltroParValor(pv);
+                sfsd.subFiltroParValor_principal=fv;
+                sfsd.subFiltroParValor_principal.id_select=this.id_select_valor_multiple_principal;
+                const dic=new Map();
+                sfsd.dic_subFiltroParValor_secundario=dic;
+                for (let i = 0; i < listaParValorTitulo.length; i++) {
+                    const v = listaParValorTitulo[i];
+
+                    let pv2=fv.add(v[0],v[1]);
+
+                    let sub_listaParValorTitulo=v[2];
+                    let fv2=new SubFiltroParValor(pv2);
+                    fv2.id_select=this.id_select_valor_multiple_secundario;
+                    for (let j = 0; j <sub_listaParValorTitulo.length; j++) {
+                        const v2 = sub_listaParValorTitulo[j];
+
+                        fv2.add(v2[0],v2[1]);
+                    }
+                    dic.set(pv2.valor,fv2);
+                }
+
+                this.lista.push(new Filtro(sfsd,pv));
             }
             llenar_Select(){
                 const select=document.getElementById(this.id_select_campo);
@@ -268,7 +338,12 @@
                     opcion.textContent=pv.titulo;
                     select.appendChild(opcion);
                 }
-
+                // this.lista.forEach(v => {
+                //     const opcion=document.createElement('option');
+                //     let pv=v.parValor;
+                //     opcion.value=pv.valor;
+                //     opcion.textContent=pv.titulo;
+                // });
 
             }
             getFiltroActual(){
@@ -284,16 +359,30 @@
                 let subFiltro=filtroActual.subFiltro;
 
                 let esSelect=subFiltro instanceof SubFiltroParValor;
+                let esMultipleSelect=subFiltro instanceof SubFiltroSelecDependientes;
+                let esText=subFiltro instanceof SubFiltroTexto;
 
                 if(esSelect){
                     subFiltro.id_select=this.id_select_valor;
                     subFiltro.llenar_Select();
-                }else{
+                }
+                else if(esMultipleSelect){
+                   // subFiltro.
+                   subFiltro.llenar_Select_principal();
+                    subFiltro.llenar_Select_secundario();
+
+                }
+                else{
+
+
+
                     text_valor.value=subFiltro.texto;
                 }
 
                 mostrarOcultarElemento(this.id_select_valor,esSelect);
-                mostrarOcultarElemento(this.id_text_valor,!esSelect);
+                mostrarOcultarElemento(this.id_text_valor,esText);
+                mostrarOcultarElemento(this.id_select_valor_multiple_principal,esMultipleSelect);
+                mostrarOcultarElemento(this.id_select_valor_multiple_secundario,esMultipleSelect);
             }
         }
 
@@ -317,7 +406,11 @@
                     opcion.textContent=v.titulo;
                     select.appendChild(opcion);
                 }
-
+            // subFiltroParValor.lista.forEach(v => {
+            //     const opcion=document.createElement('option');
+            //     opcion.value=v.valor;
+            //     opcion.textContent=v.titulo;
+            // });
         }
         function mostrarOcultarElemento(id,mostrar){
             const elemento=document.getElementById(id);
@@ -347,7 +440,12 @@
                 if(subFiltroAnterior instanceof SubFiltroParValor){
                     subFiltroAnterior.setIndiceSeleccionado(select_valor.selectedIndex);
 
-                }else{
+                }
+                else if(subFiltroAnterior instanceof SubFiltroSelecDependientes){
+                    const select_valor_multiple_principal=document.getElementById(filtrador.id_select_valor_multiple_principal);
+                    subFiltroAnterior.subFiltroParValor_principal.setIndiceSeleccionado(select_valor_multiple_principal.selectedIndex);
+                }
+                else {
                     subFiltroAnterior.texto=text_valor.value;
 
                 }
@@ -360,6 +458,19 @@
 
 
             });
+
+
+            const select_valor_multiple_principal=document.getElementById(filtrador.id_select_valor_multiple_principal);
+            const select_valor_multiple_secundario=document.getElementById(filtrador.id_select_valor_multiple_secundario);
+
+            addOnChange_Select(filtrador.id_select_valor_multiple_principal,(v,i)=>{
+                let filtroAnterior=filtrador.getFiltroActual();
+                let subFiltroAnterior=filtroAnterior.subFiltro;
+                subFiltroAnterior.subFiltroParValor_principal.setIndiceSeleccionado(i);
+                subFiltroAnterior.llenar_Select_secundario();
+
+            });
+
         }
 
         function establecerValores(filtrador){
@@ -372,33 +483,13 @@
         FT.id_select_valor="idValor_select";
         FT.id_text_valor="idValor_text";
 
+        FT.id_select_valor_multiple_principal="idValor_select_multiple_principipal";
+        FT.id_select_valor_multiple_secundario="idValor_select_multiple_secundario";
+
+
         {% block scripts_datos_filtros %}{% endblock %}
 
-        {#FT.addT("asd","Asd");#}
-        {#FT.addP([#}
-        {#    ["a","A"]#}
-        {#    ,["b","B"]#}
-        {#    ,["c","C"]#}
-        {#    ,["d","D"]#}
-        {#    ,["e","E"]#}
-        {#],"0asd","0Asd")#}
-        {#FT.addT("qwe","Qwe");#}
-        {#FT.addP([#}
-        {#    ["a0","A0"]#}
-        {#    ,["b0","B0"]#}
-        {#    ,["c0","C0"]#}
-        {#    ,["d0","D0"]#}
-        {#    ,["e0","E0"]#}
-        {#],"0qwe","0Qwe")#}
-        {#FT.addT("zxc","0zxc");#}
-        {#FT.addT("123","0123");#}
-        {#FT.addP([#}
-        {#    ["a1","A1"]#}
-        {#    ,["b1","B1"]#}
-        {#    ,["c1","C1"]#}
-        {#    ,["d1","D1"]#}
-        {#    ,["e1","E1"]#}
-        {#],"1zxc","1zxc");#}
+
 
         establecerValores(FT);
         setActualizar_Valor(FT);
@@ -424,8 +515,24 @@
             const text_valor=document.getElementById(id_text_valor);
             const select_campo=document.getElementById(id_select_campo);
 
+            const select_valor_multiple_principal=document.getElementById(FT.id_select_valor_multiple_principal);
+            const select_valor_multiple_secundario=document.getElementById(FT.id_select_valor_multiple_secundario);
 
-            let valor=subFiltroAnterior instanceof SubFiltroTexto? text_valor.value:select_valor.value;
+
+            let esSelect=subFiltroAnterior instanceof SubFiltroParValor;
+            let esMultipleSelect=subFiltroAnterior instanceof SubFiltroSelecDependientes;
+            let esText=subFiltroAnterior instanceof SubFiltroTexto;
+
+
+            let valor="";
+            if(esSelect){
+                valor=select_valor.value;
+            }else if(esText){
+                valor=text_valor.value;
+            }else if(esMultipleSelect){
+                valor=select_valor_multiple_principal.value+","+select_valor_multiple_secundario.value;
+            }
+            //=subFiltroAnterior instanceof SubFiltroTexto? text_valor.value:select_valor.value;
             let campo=select_campo.value;
 
             const form_campo=document.getElementById(ID_HIDEN_CAMPO);

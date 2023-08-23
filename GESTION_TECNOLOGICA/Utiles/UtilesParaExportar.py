@@ -10,3 +10,4 @@ def retornarBienDatoExportar(metodo):
             pass
         return ""
     return accion
+

@@ -6,6 +6,7 @@ import os
 from django.views import generic
 from GESTION_TECNOLOGICA.Utiles.LocalizacionDePagina import *
 from django.db.models import Q
+from GESTION_TECNOLOGICA.Utiles.UtilesGenerales import *
 def rellenar_instituciones_productivas(request):
     class LT:
         def __init__(self):
@@ -66,6 +67,13 @@ class InstitucionProductiva_ListView(generic.ListView):
                 queryset = queryset.filter(provincia__nombre__icontains=q)
             elif campo=='Municipio':
                 queryset = queryset.filter(municipio__nombre__icontains=q)
+            elif campo=='ProvinciaYMunicipio':
+                provincia,municipio=getProvinciMunicipioDeQ(q)
+                if municipio == "Todos":
+                    queryset= queryset.filter(provincia__nombre__icontains=provincia)
+                else:
+                    queryset = queryset.filter(provincia__nombre__icontains=provincia
+                                           ,municipio__nombre__icontains=municipio)
             elif campo=='Tipo':
                 queryset = queryset.filter(tipoDeInstitucionProductiva__nombre__icontains=q)
             elif campo=='Producto':
@@ -90,6 +98,16 @@ class InstitucionProductiva_ListView(generic.ListView):
 
         context['provincias'] = Provincia.objects.all()
         context['municipios'] = Municipio.objects.all()#.distinct("nombre")
+        lpm=[]
+        lp=Provincia.objects.all()
+        for p in lp:
+            lm=Municipio.objects.filter(provincia=p)
+            lsm=['Todos']
+            for m in lm:
+                lsm.append(m)
+            lpm.append([p.nombre,lsm])#[ v.nombre for v in lm]
+
+        context['ProvinciaYMunicipio']=lpm
 
         lista = self.get_queryset()  # self.queryset#context['object_list']
 

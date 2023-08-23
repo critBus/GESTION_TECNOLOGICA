@@ -17,6 +17,7 @@ from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import Table
 from django.db.models import Q
+from GESTION_TECNOLOGICA.Utiles.UtilesGenerales import *
 # Create your views here.
 from typing import TYPE_CHECKING, Dict, List, NoReturn, Optional, Union, Tuple, cast, ClassVar
 
@@ -34,7 +35,7 @@ class AdministradorDeReporte:
         self.titulo=""
         self.claseModelo = None
         self.dic_campo_atributo = {}
-        self.dic_campo_metodo_filtrar = {}#q,campo->List
+        self.dic_campo_metodo_filtrar = {}#a:AdministradorDeReporte,q,campo->List
         self.claseResource=None
     def setClaseModelo(self,claseModelo):
         self.claseModelo =claseModelo
@@ -111,7 +112,7 @@ class AdministradorDeReporte:
         if q and campo:
             q = q.strip()
             if campo in self.dic_campo_metodo_filtrar:
-                queryset = self.dic_campo_metodo_filtrar[campo](q, campo)
+                queryset = self.dic_campo_metodo_filtrar[campo](self,q, campo)
             elif campo in self.dic_campo_atributo:
                 valor = self.dic_campo_atributo[campo]
                 filtro = str(valor + "__icontains")
@@ -165,8 +166,15 @@ REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.setClaseModelo(InstitucionProductiva)
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.dic_campo_atributo['Provincia']='provincia__nombre'
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.dic_campo_atributo['Municipio']='municipio__nombre'
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.dic_campo_atributo['Tipo']='tipoDeInstitucionProductiva__nombre'
-REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.dic_campo_metodo_filtrar['Producto']=lambda q,c:InstitucionProductiva.objects.filter(producto__in=Producto.objects.filter(nombre__icontains=q))
-REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.dic_campo_metodo_filtrar['TipoDeProducto']=lambda q,c:InstitucionProductiva.objects.filter(producto__in=Producto.objects.filter(tipoDeProducto__nombre__icontains=q))
+def filtrar_provincia_municipio_institucion(a:AdministradorDeReporte,q:str,c:str):
+    provincia,municipio=getProvinciMunicipioDeQ(q)
+    if municipio == "Todos":
+        return a.claseModelo.objects.filter(provincia__nombre__icontains=provincia)
+    return a.claseModelo.objects.filter(provincia__nombre__icontains=provincia
+                                           ,municipio__nombre__icontains=municipio)
+REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.dic_campo_metodo_filtrar['ProvinciaYMunicipio']=filtrar_provincia_municipio_institucion
+REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.dic_campo_metodo_filtrar['Producto']=lambda a,q,c:InstitucionProductiva.objects.filter(producto__in=Producto.objects.filter(nombre__icontains=q))
+REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.dic_campo_metodo_filtrar['TipoDeProducto']=lambda a,q,c:InstitucionProductiva.objects.filter(producto__in=Producto.objects.filter(tipoDeProducto__nombre__icontains=q))
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.claseResource=InstitucionProductivaResource
 
 
@@ -190,6 +198,13 @@ REPORTE_INSTITUCIONES_CIENTIFICA_PDF.dic_campo_atributo['Municipio']='municipio_
 REPORTE_INSTITUCIONES_CIENTIFICA_PDF.dic_campo_atributo['Tipo']='tipoDeInstitucionCientifica__nombre'
 REPORTE_INSTITUCIONES_CIENTIFICA_PDF.dic_campo_atributo['Tecnologia']='tecnologias__nombre'
 REPORTE_INSTITUCIONES_CIENTIFICA_PDF.dic_campo_atributo['TipoDeTecnologia']='tecnologias__tipoDeTecnologia__nombre__icontains'
+def filtrar_provincia_municipio_institucion(a:AdministradorDeReporte,q:str,c:str):
+    provincia,municipio=getProvinciMunicipioDeQ(q)
+    if municipio == "Todos":
+        return a.claseModelo.objects.filter(provincia__nombre__icontains=provincia)
+    return a.claseModelo.objects.filter(provincia__nombre__icontains=provincia
+                                           ,municipio__nombre__icontains=municipio)
+REPORTE_INSTITUCIONES_CIENTIFICA_PDF.dic_campo_metodo_filtrar['ProvinciaYMunicipio']=filtrar_provincia_municipio_institucion
 #REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.dic_campo_metodo_filtrar['Tecnologia']=lambda q,c:InstitucionProductiva.objects.filter(producto__in=Tecnologia.objects.filter(nombre__icontains=q))
 REPORTE_INSTITUCIONES_CIENTIFICA_PDF.claseResource=InstitucionCientificaResource
 
@@ -224,6 +239,6 @@ REPORTE_PRODUCTOS_PDF.setClaseModelo(Producto)
 REPORTE_PRODUCTOS_PDF.dic_campo_atributo['Tipo']='tipoDeProducto__nombre'
 # REPORTE_PRODUCTOS_PDF.dic_campo_atributo['Institución']='institucionProductiva__Nombre'
 # REPORTE_PRODUCTOS_PDF.dic_campo_atributo['Institución_Abreviado']='institucionProductiva__NombreAbreviado'
-REPORTE_PRODUCTOS_PDF.dic_campo_metodo_filtrar['Institución']=lambda q,c:Producto.objects.filter(Q(institucionProductiva__Nombre__icontains=q)|Q(institucionProductiva__NombreAbreviado__icontains=q))
+REPORTE_PRODUCTOS_PDF.dic_campo_metodo_filtrar['Institución']=lambda a,q,c:Producto.objects.filter(Q(institucionProductiva__Nombre__icontains=q)|Q(institucionProductiva__NombreAbreviado__icontains=q))
 REPORTE_PRODUCTOS_PDF.claseResource=ProductoResource
 

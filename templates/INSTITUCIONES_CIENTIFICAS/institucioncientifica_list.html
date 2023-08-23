@@ -109,18 +109,30 @@ FT.addT("nombre","Nombre");
     FT.addT("Contacto","Contacto");
     FT.addT("Telefono","Telefono");
     FT.addT("Correo","Correo");
-    FT.addP([
-        {% for v in provincias %}
-            {% if not forloop.first %},{% endif %}["{{ v }}","{{ v }}"]
+{#    FT.addP([#}
+{#        {% for v in provincias %}#}
+{#            {% if not forloop.first %},{% endif %}["{{ v }}","{{ v }}"]#}
+{#        {% endfor %}#}
+{##}
+{#        ],"Provincia","Provincia")#}
+{#    FT.addP([#}
+{#        {% for v in municipios %}#}
+{#            {% if not forloop.first %},{% endif %}["{{ v }}","{{ v }}"]#}
+{#        {% endfor %}#}
+{##}
+{#        ],"Municipio","Municipio")#}
+    FT.addM([
+        {% for v in ProvinciaYMunicipio %}
+            {% if not forloop.first %},{% endif %}["{{ v.0 }}","{{ v.0 }}"
+            ,[
+                {% for m in v.1 %}
+                    {% if not forloop.first %},{% endif %}["{{ m }}","{{ m }}"]
+                {% endfor %}
+                ]
+            ]
         {% endfor %}
 
-        ],"Provincia","Provincia")
-    FT.addP([
-        {% for v in municipios %}
-            {% if not forloop.first %},{% endif %}["{{ v }}","{{ v }}"]
-        {% endfor %}
-
-        ],"Municipio","Municipio")
+        ],"ProvinciaYMunicipio","Provincia")
     FT.addP([
         {% for v in tipos %}
             {% if not forloop.first %},{% endif %}["{{ v }}","{{ v }}"]
