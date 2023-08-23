@@ -113,6 +113,24 @@ def rellenar_provincias_municipios(request):
         ,[ "Guantánamo",Guantanamo]
     ]
 
+    for p in lp:
+        provincia=p[0]
+
+        if not Provincia.objects.filter(nombre=provincia).exists():
+            n=Provincia()
+            n.nombre=provincia
+            n.save()
+        else:
+            n=Provincia.objects.filter(nombre=provincia).first()
+        for m in p[1]:
+            if not Municipio.objects.filter(provincia=n,nombre=m).exists():
+                mu = Municipio()
+                mu.nombre = m
+                mu.provincia=n
+                mu.save()
+
+    return JsonResponse({'status': 'ok'}, status=200)
+
 
 def rellenar_provincias(request):
     lp=["Santiago de Cuba" , "Granma" , "Cienfuegos" , "Pinar del Río" , "Artemisa" , "La Habana" , "Mayabeque" , "Las Tunas" , "Matanzas" , "Villa Clara" , "Sancti Spíritus" , "Isla de la Juventud" , "Holguín" , "Ciego de Ávila" , "Camagüey" , "Guantánamo"]
