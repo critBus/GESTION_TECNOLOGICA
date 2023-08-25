@@ -81,18 +81,18 @@ class InstitucionProductiva(models.Model):
 
     TieneAlamacenConRefrigeracion=models.BooleanField(default=False
                                                       ,verbose_name="Tiene Refrigeración")
-    capacidadDeRefrigeracion = models.FloatField(
-        verbose_name="Capacidad de refrigeración en KG",blank=True,null=True)
+    # capacidadDeRefrigeracion = models.FloatField(
+    #     verbose_name="Capacidad de refrigeración en KG",blank=True,null=True)
     descripcion = models.TextField(verbose_name="Descripción",blank=True,null=True)
 
 
 
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-    def clean(self):
-        if self.TieneAlamacenConRefrigeracion:
-            if (not self.capacidadDeRefrigeracion) or self.capacidadDeRefrigeracion < 0:
-                raise ValidationError("La capacidad de refrigeración debe ser superior a 0")
+    # def clean(self):
+    #     if self.TieneAlamacenConRefrigeracion:
+    #         if (not self.capacidadDeRefrigeracion) or self.capacidadDeRefrigeracion < 0:
+    #             raise ValidationError("La capacidad de refrigeración debe ser superior a 0")
 
     def __str__(self):
         return self.Nombre
@@ -129,15 +129,15 @@ class InstitucionProductivaResource(resources.ModelResource):
         column_name='Capacidad De Productos'
         , attribute='capacidadDeProductos'
     )
-    capacidadDeRefrigeracion=Field(
+    TieneAlamacenConRefrigeracion=Field(
         column_name='Refrigeración'
-        , attribute='capacidadDeRefrigeracion'
+        , attribute='TieneAlamacenConRefrigeracion'
     )
     provincia=Field()
     class Meta:
         model = InstitucionProductiva
         fields = ('Nombre','Contacto','Telefono','Correo','municipio','Direccion')
-        export_order = ('Nombre', 'NombreAbreviado','Contacto','Telefono','Correo','provincia','municipio','Direccion','tipoDeInstitucionProductiva','capacidadDeRefrigeracion','capacidadDeProductos')
+        export_order = ('Nombre', 'NombreAbreviado','Contacto','Telefono','Correo','provincia','municipio','Direccion','tipoDeInstitucionProductiva','TieneAlamacenConRefrigeracion','capacidadDeProductos')
 
     @staticmethod
     @retornarBienDatoExportar
@@ -148,11 +148,11 @@ class InstitucionProductivaResource(resources.ModelResource):
 
     @staticmethod
     @retornarBienDatoExportar
-    def dehydrate_capacidadDeRefrigeracion(instance):
+    def dehydrate_TieneAlamacenConRefrigeracion(instance):
         if instance.TieneAlamacenConRefrigeracion is not None \
-                and instance.capacidadDeRefrigeracion is not None:
-            return instance.capacidadDeRefrigeracion if instance.TieneAlamacenConRefrigeracion else "-"
-        return ""
+                and instance.TieneAlamacenConRefrigeracion:
+            return "Si"
+        return "No"
     @staticmethod
     @retornarBienDatoExportar
     def dehydrate_provincia(instance):

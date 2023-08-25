@@ -230,12 +230,30 @@ class InstitucionCientifica_DetailView(generic.DetailView):
         context['config']=config
         context['lcp'] = lcp
         dato=context['object']
+
         context['listaPuntos'] = [{
             "latitud": v.latitud
             , "longitud": v.longitud
             , "textoAMostrar": v.NombreAbreviado
         } for v in [dato]]
         context['nombreProvincia'] = dato.provincia.nombre
+
+        # def getABCD(lat, longi):
+        #     a = -0.0005
+        #     b = -0.0005
+        #     c = 0.0005
+        #     d = 0.0005
+        #     return (lat - a, longi - b, lat - c, longi - d)
+        #
+        # a,b,c,d=getABCD(dato.latitud,dato.longitud)
+        # context['a'] =a
+        # context['c'] = b
+        # context['b'] = c
+        # context['d'] = d
+        # context['latitud'] =dato.latitud
+        # context['longitud'] = dato.longitud
+        # print("lat=",dato.latitud,"long=",dato.longitud)
+        # print(a," ",b," ",c," ",d,"")
         return context
 
 

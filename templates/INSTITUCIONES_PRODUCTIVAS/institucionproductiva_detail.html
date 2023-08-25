@@ -134,9 +134,9 @@
                 <ul class="mt-3">
 
                   <li><i class="bi bi-back"></i><b> Tipo:</b> {{object.tipoDeInstitucionProductiva.nombre}}<br/></li>
-                  {% if object.TieneAlamacenConRefrigeracion %}
-                  <li><i class="bi bi-thermometer-snow"></i><b> Refrigeración:</b> {{object.capacidadDeRefrigeracion}}<br/></li>
-                  {% endif %}
+
+                  <li><i class="bi bi-thermometer-snow"></i><b> Refrigeración:</b>{% if object.TieneAlamacenConRefrigeracion %} Si {% else %} No{% endif %}<br/></li>
+
                   <li><i class="bi bi-box"></i><b> Capacidad de Productos:</b> {{object.capacidadDeProductos}}<br/></li>
 
               </ul>

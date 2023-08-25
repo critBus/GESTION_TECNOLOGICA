@@ -43,6 +43,7 @@
                 <li><i class="bi bi-check-circle"></i> <span>{{v.Contacto}}</span></li>
                 <li><i class="bi bi-check-circle"></i> <span>{{v.Telefono}}</span></li>
                 <li><i class="bi bi-check-circle"></i> <span>{{v.Correo}}</span></li>
+                  <li><i class="bi bi-thermometer-snow"></i> <span><b> Refrigeración:</b>{% if v.TieneAlamacenConRefrigeracion %} Si {% else %} No{% endif %}</span></li>
               </ul>
                 <p><b>Productos</b></p>
                 <ul>
@@ -103,18 +104,7 @@
     FT.addT("Contacto","Contacto");
     FT.addT("Telefono","Telefono");
     FT.addT("Correo","Correo");
-{#    FT.addP([#}
-{#        {% for v in provincias %}#}
-{#            {% if not forloop.first %},{% endif %}["{{ v }}","{{ v }}"]#}
-{#        {% endfor %}#}
-{##}
-{#        ],"Provincia","Provincia")#}
-{#    FT.addP([#}
-{#        {% for v in municipios %}#}
-{#            {% if not forloop.first %},{% endif %}["{{ v }}","{{ v }}"]#}
-{#        {% endfor %}#}
-{##}
-{#        ],"Municipio","Municipio")#}
+
     FT.addM([
         {% for v in ProvinciaYMunicipio %}
             {% if not forloop.first %},{% endif %}["{{ v.0 }}","{{ v.0 }}"
@@ -140,6 +130,11 @@
         {% endfor %}
 
         ],"TipoDeProducto","Tipo De Producto")
+    FT.addP([
+        ["True","Si"]
+        ,["False","No"]
+
+        ],"TieneAlamacenConRefrigeracion","Refrigeración")
 
 {% endblock%}
 

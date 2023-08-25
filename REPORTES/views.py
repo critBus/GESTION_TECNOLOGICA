@@ -161,7 +161,7 @@ REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.add('Municipio',lambda v:v.municipio.nombre
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.add('Direccion',lambda v:v.Direccion)
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.add('Tipo',lambda v:v.tipoDeInstitucionProductiva.nombre)
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.add('Productos',lambda v:v.capacidadDeProductos)
-REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.add('Refrigeracion',lambda v:v.capacidadDeRefrigeracion if v.TieneAlamacenConRefrigeracion else "-")
+REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.add('Refrigeracion',lambda v:"Si" if v.TieneAlamacenConRefrigeracion else "No")
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.setClaseModelo(InstitucionProductiva)
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.dic_campo_atributo['Provincia']='provincia__nombre'
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.dic_campo_atributo['Municipio']='municipio__nombre'

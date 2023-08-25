@@ -33,13 +33,17 @@
 
      {% for punto in listaPuntos %}
        LM.add({{ punto.latitud|numeroConComa}},{{ punto.longitud|numeroConComa }},"{{ punto.textoAMostrar }}");
-           {% endfor %}
+     {% endfor %}
 
+    var mostrarMapaOffLine=true;
 </script>
 
 {% block scripts_extras_para_modificar_mapa %}
     {% endblock %}
 <script>
+if(mostrarMapaOffLine){
+
+
 
 
 listaDatos=[];
@@ -120,6 +124,9 @@ pointSeries.bullets.push(function() {
 
 chart.set("zoomControl", am5map.ZoomControl.new(root, {}));
 
+
+
+}
 
 </script>
 

@@ -45,7 +45,7 @@ class Especie(models.Model):
         app_label = 'INSTITUCIONES_CIENTIFICAS'
         ordering=('nombreComun',)
     nombreCientifico = models.CharField(max_length=255,unique=True,verbose_name="Nombre Científico")
-    nombreComun = models.CharField(max_length=255,verbose_name="Nombre Común")
+    nombreComun = models.CharField(max_length=255,unique=True,verbose_name="Nombre Común")
     Imagen = models.ImageField(upload_to='Tecnologias', blank=True, null=True)
     tipoDeEspecie = models.CharField(
         max_length=10,

@@ -17,7 +17,7 @@ from django.forms import TextInput
 from django.core.validators import RegexValidator,MinValueValidator
 
 VALIDADOR_TELEFONO=RegexValidator(regex=r"^([+]?53)?\d{8}$",message="Teléfono incorrecto")#(?>!\s)
-VALIDADOR_NOMBRE=RegexValidator(regex=r"^[a-zA-ZáéíóúÁÉÍÓÚÑñ]+(?:\s+[a-zA-ZáéíóúÁÉÍÓÚÑñ]+){1,5}$",message="Nombre incorrecto")
+VALIDADOR_NOMBRE=RegexValidator(regex=r"^[a-zA-ZáéíóúÁÉÍÓÚÑñ]+(?:\s+[a-zA-ZáéíóúÁÉÍÓÚÑñ]+){0,5}$",message="Nombre incorrecto")
 
 class ConfiguracionGeneral(SingletonModel):
     nombreSitio=models.CharField(max_length=20,verbose_name="Sitio",null=True)
