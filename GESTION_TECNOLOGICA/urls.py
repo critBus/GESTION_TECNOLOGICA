@@ -51,5 +51,7 @@ urlpatterns = [
     path('', include('REPORTES.urls')),#, namespace='REPORTES'
     path('', include('INSTITUCIONES_PRODUCTIVAS.urls')),
     path('', include('INSTITUCIONES_CIENTIFICAS.urls')),
+
+    re_path(r'^.+$', vistaErrorUrl),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)\
 +static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

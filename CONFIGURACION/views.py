@@ -4,8 +4,35 @@ from django.shortcuts import render
 from .models import *
 # Create your views here.
 from GESTION_TECNOLOGICA.Utiles.LocalizacionDePagina import *
+from GESTION_TECNOLOGICA.Utiles.UtilesGenerales import *
 from INSTITUCIONES_PRODUCTIVAS.models import *
 from INSTITUCIONES_CIENTIFICAS.models import *
+
+
+from builtins import KeyError
+def seguridadError(vista):
+    def zz(*args,**keywords):
+        try:
+            return vista(*args,**keywords)
+
+        except:
+
+            verException()
+            lcp = LocalizacionDePagina("Advertencia", "Error en url")
+
+            return render(args[0], 'visualCliente/error_500.html',
+                          {"lcp": lcp})
+
+    return zz
+
+def vistaErrorUrl(request):
+    lcp = LocalizacionDePagina("Advertencia", "Error 404")
+
+    return render(request, 'visualCliente/error_404.html',
+                           {"lcp": lcp}
+                           )
+
+@seguridadError
 def view_home(request):
 
     config = ConfiguracionGeneral.get_solo()
@@ -17,7 +44,7 @@ def view_home(request):
         ,"listaInformaciones":Informacion_Principal.objects.filter(Pagina=datos)
 
     })
-
+@seguridadError
 def view_quienes_somos(request):
     lcp = LocalizacionDePagina("Informacíon", "Quienes Somos")
     config = ConfiguracionGeneral.get_solo()
@@ -47,7 +74,7 @@ class EtiquetaYTitulo:
         self.tag = ""
         self.tag_titulo = None
 
-
+@seguridadError
 def view_galeria(request):
     lcp = LocalizacionDePagina("Informacíon", "Galería")
     config = ConfiguracionGeneral.get_solo()

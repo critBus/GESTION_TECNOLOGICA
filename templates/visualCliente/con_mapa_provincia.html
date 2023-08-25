@@ -1,9 +1,41 @@
 {% extends "visualCliente/con_puntos_en_mapa.html" %}
 {% load static %}
-
+{% block css_extra %}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+ <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+ integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+ crossorigin=""></script>
+{% endblock %}
 
 {% block scripts_extras_para_modificar_mapa %}
-{##}
+    <script>
+
+    function verCoordenadas(latitud,longitud){
+        var map = L.map('chartdiv').setView([latitud, longitud], 13);
+
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        var marker = L.marker([latitud, longitud]).addTo(map);
+    }
+     if(LM.lista.length>0){
+        const e = LM.lista[0];
+
+        const latitud=e.latitud;
+        const longitud=e.longitud;
+
+        verCoordenadas(e.latitud,e.longitud);
+     }
+
+    mostrarMapaOffLine=false;
+    </script>
+
+    {##}
 {#<script src="https://maps.google.com/maps/api/js?sensor=false"></script>#}
 {#    <script type="text/javascript">#}
 {#function showGoogleMaps(latitud,longitud)#}

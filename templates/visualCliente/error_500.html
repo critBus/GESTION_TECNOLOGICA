@@ -1,0 +1,42 @@
+{% extends "visualCliente/padre_breadcrumbs.html" %}
+{% load static %}
+
+{% block titulo %}
+    Error 500
+{% endblock %}
+
+
+
+{% block contenido %}
+
+<section id="about" class="about">
+
+    <div class="info d-flex align-items-center text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col"></div>
+
+
+<div class="jumbotron">
+
+                    <p class="lead">Por favor revise su conexión con el servidor </p>
+                    <hr class="my-4">
+                    <p>Utilice solo las direcciones correctas de nuestro sitio web  </p>
+                    <a class="btn btn-primary btn-lg mt-4" href="{% url 'home' %}" role="button">Volver</a>
+                  </div>
+
+
+
+            </div></div></div></section>
+
+
+
+
+
+
+{% endblock%}
+
+{% block scripts_extras %}
+
+
+{% endblock%}

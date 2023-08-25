@@ -1,0 +1,48 @@
+{% extends "visualCliente/padre_breadcrumbs.html" %}
+{% load static %}
+
+{% block titulo %}
+    Error 404
+{% endblock %}
+
+
+
+{% block contenido %}
+<section id="about" class="about">
+
+    <div class="info d-flex align-items-center text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+
+
+
+<div class="jumbotron ">
+{#                    <h1 class="display-4">Error de URL</h1>#}
+                    <p class="lead">Dirección no encontrada en nuestro sitio web  </p>
+                    <hr class="my-4">
+                    <p>Utilice solo las direcciones correctas de nuestro sitio web  </p>
+                    <a class="btn btn-primary btn-lg mt-4" href="{% url 'home' %}" role="button">Volver</a>
+                  </div>
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+{% endblock%}
+
+{% block scripts_extras %}
+
+
+{% endblock%}
