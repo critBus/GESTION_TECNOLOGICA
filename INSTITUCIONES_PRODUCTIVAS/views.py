@@ -117,6 +117,7 @@ class InstitucionProductiva_ListView(generic.ListView):
             "latitud": v.latitud
             , "longitud": v.longitud
             , "textoAMostrar": v.NombreAbreviado
+            , "url": "/instituciones_productivas/findById/" + str(v.id)
         } for v in lista]
 
         return context
@@ -136,6 +137,7 @@ class InstitucionProductiva_DetailView(generic.DetailView):
             "latitud": v.latitud
             , "longitud": v.longitud
             , "textoAMostrar": v.NombreAbreviado
+            , "url": "/instituciones_productivas/findById/" + str(v.id)
         } for v in [dato]]
 
         context['nombreProvincia']=dato.provincia.nombre
@@ -206,6 +208,7 @@ class Producto_ListView(generic.ListView):
             "latitud": ip.institucion.latitud
             , "longitud": ip.institucion.longitud
             , "textoAMostrar": ip.institucion.NombreAbreviado + " | " + " | ".join([j.nombre for j in ip.productos])
+                , "url": "/instituciones_productivas/findById/" + str(ip.institucion.id)
             # +" | "+
         })
 
@@ -234,6 +237,7 @@ class Producto_DetailView(generic.DetailView):
             "latitud": v.latitud
             , "longitud": v.longitud
             , "textoAMostrar": v.NombreAbreviado
+            , "url": "/instituciones_productivas/findById/" + str(v.id)
         } for v in [dato]]
 
         context['nombreProvincia'] = dato.provincia.nombre

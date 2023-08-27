@@ -35,23 +35,23 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('quienes_somos/', view_quienes_somos, name='quienes_somos'),
     path('galeria/', view_galeria, name='galeria'),
-    path('instituciones_tecnologicas/', InstitucionCientifica_ListView.as_view(), name='instituciones_tecnologicas'),
-    path('instituciones_tecnologicas/findById/<int:pk>', InstitucionCientifica_DetailView.as_view()),
-    path('instituciones_productivas/', InstitucionProductiva_ListView.as_view(), name='instituciones_productivas'),
-    path('instituciones_productivas/findById/<int:pk>', InstitucionProductiva_DetailView.as_view()),
-    path('Servicios/Tecnologias/lista', Tecnologia_ListView.as_view(), name='tecnologias'),
-    path('Servicios/Tecnologias/findById/<int:pk>', Tecnologia_DetailView.as_view()),
-    path('Servicios/Productos/lista', Producto_ListView.as_view(), name='productos'),
-    path('Servicios/Productos/findById/<int:pk>', Producto_DetailView.as_view()),
-    path('Servicios/Especies/lista', Especie_ListView.as_view(), name='especies'),
-    path('Servicios/Especies/findById/<int:pk>', Especie_DetailView.as_view()),
-    path('mapa/', view_home, name='mapa'),
-    path('contacto/', view_home, name='contacto'),
+    path('instituciones_tecnologicas/', seguridadError(InstitucionCientifica_ListView.as_view()) , name='instituciones_tecnologicas'),
+    path('instituciones_tecnologicas/findById/<int:pk>', seguridadError(InstitucionCientifica_DetailView.as_view())),
+    path('instituciones_productivas/', seguridadError(InstitucionProductiva_ListView.as_view()), name='instituciones_productivas'),
+    path('instituciones_productivas/findById/<int:pk>', seguridadError(InstitucionProductiva_DetailView.as_view())),
+    path('Servicios/Tecnologias/lista', seguridadError(Tecnologia_ListView.as_view()), name='tecnologias'),
+    path('Servicios/Tecnologias/findById/<int:pk>', seguridadError(Tecnologia_DetailView.as_view())),
+    path('Servicios/Productos/lista', seguridadError(Producto_ListView.as_view()), name='productos'),
+    path('Servicios/Productos/findById/<int:pk>', seguridadError(Producto_DetailView.as_view())),
+    path('Servicios/Especies/lista', seguridadError(Especie_ListView.as_view()), name='especies'),
+    path('Servicios/Especies/findById/<int:pk>', seguridadError(Especie_DetailView.as_view())),
+    # path('mapa/', view_home, name='mapa'),
+    # path('contacto/', view_home, name='contacto'),
     re_path(r'^chaining/', include('smart_selects.urls')),
     path('', include('REPORTES.urls')),#, namespace='REPORTES'
     path('', include('INSTITUCIONES_PRODUCTIVAS.urls')),
     path('', include('INSTITUCIONES_CIENTIFICAS.urls')),
 
-    re_path(r'^.+$', vistaErrorUrl),
+
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)\
-+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
++static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)+[re_path(r'^.+$', vistaErrorUrl),]

@@ -217,6 +217,7 @@ class InstitucionCientifica_ListView(generic.ListView):
             "latitud":v.latitud
             ,"longitud":v.longitud
             ,"textoAMostrar":v.NombreAbreviado
+            ,"url":"/instituciones_tecnologicas/findById/"+str(v.id)
         } for v in lista]
         return context
 
@@ -235,6 +236,7 @@ class InstitucionCientifica_DetailView(generic.DetailView):
             "latitud": v.latitud
             , "longitud": v.longitud
             , "textoAMostrar": v.NombreAbreviado
+            , "url": "/instituciones_tecnologicas/findById/" + str(v.id)
         } for v in [dato]]
         context['nombreProvincia'] = dato.provincia.nombre
 
@@ -306,6 +308,7 @@ class Tecnologia_ListView(generic.ListView):
             "latitud": v.latitud
             , "longitud": v.longitud
             , "textoAMostrar": v.NombreAbreviado+" | "+" | ".join([j.nombre for j in v.tecnologias.all()]) #+" | "+
+            , "url": "/instituciones_tecnologicas/findById/" + str(v.id)
         } for v in listaI]
 
         return context
@@ -331,6 +334,7 @@ class Tecnologia_DetailView(generic.DetailView):
             "latitud": v.latitud
             , "longitud": v.longitud
             , "textoAMostrar": v.NombreAbreviado + " | " + " | ".join([j.nombre for j in v.tecnologias.all()])
+            , "url": "/instituciones_tecnologicas/findById/" + str(v.id)
             # +" | "+
         } for v in listaI]
 
@@ -387,6 +391,7 @@ class Especie_ListView(generic.ListView):
             , "longitud": v.longitud
             , "textoAMostrar": v.NombreAbreviado + " | " + " | ".join(getListaNombre(v))
             # +" | "+
+            , "url": "/instituciones_tecnologicas/findById/" + str(v.id)
         } for v in listaI]
 
         return context
@@ -423,6 +428,7 @@ class Especie_DetailView(generic.DetailView):
             , "longitud": v.longitud
             , "textoAMostrar": v.NombreAbreviado + " | " + " | ".join(getListaNombre(v))
             # +" | "+
+            , "url": "/instituciones_tecnologicas/findById/" + str(v.id)
         } for v in listaI]
 
         return context
