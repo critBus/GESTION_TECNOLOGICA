@@ -50,23 +50,13 @@ class TipoDeProductoAdmin(admin.ModelAdmin):
 admin.site.register(TipoDeProducto,TipoDeProductoAdmin)
 
 
-class ProductoInline(NestedStackedInline):#admin.TabularInline
+class ProductoAdmin(admin.ModelAdmin):#admin.TabularInline
     model = Producto
     extra = 1
     fk_name = 'institucionProductiva'
     formfield_overrides = STYLES_FORMFIELDS
-    # form =
 
-    # def get_form(self, request, obj=None, change=False, **kwargs):
-    #     forms = super(ProductoInline, self).get_form(request, obj, change, **kwargs)
-    #     forms.base_fields['tipoDeProducto'].widget.can_add_related = False
-    #     forms.base_fields['tipoDeProducto'].widget.can_change_related = False  # can_view_related
-    #     forms.base_fields['tipoDeProducto'].widget.can_view_related = False
-    #
-    #
-    #
-    #     return forms
-
+admin.site.register(Producto,ProductoAdmin)
 
 
 from REPORTES.views import *
@@ -74,7 +64,7 @@ class InstitucionProductivaAdmin(ImportExportActionModelAdmin):#admin.ModelAdmin
     resource_class = InstitucionProductivaResource
     model = InstitucionProductiva
     formfield_overrides = STYLES_FORMFIELDS
-    inlines = [ProductoInline]
+    #inlines = [ProductoInline]
     actions = [REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.getAction()]
     list_display = ('Nombre', 'NombreAbreviado', 'tipoDeInstitucionProductiva', 'provincia', 'municipio')
     search_fields = ('Nombre', 'NombreAbreviado', 'tipoDeInstitucionProductiva__nombre', 'provincia__nombre', 'municipio__nombre')
