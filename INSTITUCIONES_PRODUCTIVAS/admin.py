@@ -60,6 +60,18 @@ admin.site.register(Producto,ProductoAdmin)
 
 
 from REPORTES.views import *
+
+
+class InstitucionProductivaForm(forms.ModelForm):
+    class Meta:
+        model=InstitucionProductiva
+        fields='__all__'
+    def __init__(self,*args,**kwargs):
+        super(InstitucionProductivaForm, self).__init__(*args,**kwargs)
+        self.fields['productos'].label_from_instance=lambda obj:str(obj)+(" | "+str(obj.tipoDeProducto) if obj.tipoDeProducto else "")
+        self.fields['productos'].queryset=Producto.objects.order_by("nombre")
+
+
 class InstitucionProductivaAdmin(ImportExportActionModelAdmin):#admin.ModelAdmin
     resource_class = InstitucionProductivaResource
     model = InstitucionProductiva
@@ -71,6 +83,10 @@ class InstitucionProductivaAdmin(ImportExportActionModelAdmin):#admin.ModelAdmin
     list_filter = ('tipoDeInstitucionProductiva', 'provincia', 'municipio')#,'producto_set__tipoDeProducto__nombre'
     ordering = ('Nombre', 'tipoDeInstitucionProductiva', 'provincia', 'municipio')
     date_hierarchy = 'created'
+    filter_horizontal = ('productos',)
+    form = InstitucionProductivaForm
+
+
     def get_form(self, request, obj=None, change=False, **kwargs):
         forms=super(InstitucionProductivaAdmin,self).get_form(request,obj,change,**kwargs)
         forms.base_fields['provincia'].widget.can_add_related = False

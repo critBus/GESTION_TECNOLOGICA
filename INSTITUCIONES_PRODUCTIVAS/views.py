@@ -78,10 +78,14 @@ class InstitucionProductiva_ListView(generic.ListView):
                 queryset = queryset.filter(tipoDeInstitucionProductiva__nombre__icontains=q)
             elif campo=='Producto':
                 queryset = Producto.objects.filter(nombre__icontains=q)
-                queryset = InstitucionProductiva.objects.filter(producto__in=queryset)
+                # cantidad=queryset.count()
+                # print(cantidad)
+                queryset = InstitucionProductiva.objects.filter(productos__in=queryset)
+                # cantidad = queryset.count()
+                # print(cantidad)
             elif campo=='TipoDeProducto':
                 queryset = Producto.objects.filter(tipoDeProducto__nombre__icontains=q)
-                queryset = InstitucionProductiva.objects.filter(producto__in=queryset)
+                queryset = InstitucionProductiva.objects.filter(productos__in=queryset)
             elif campo=='TieneAlamacenConRefrigeracion':
                 queryset = queryset.filter(TieneAlamacenConRefrigeracion__icontains=q)
             else:

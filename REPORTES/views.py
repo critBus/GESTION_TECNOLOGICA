@@ -173,8 +173,8 @@ def filtrar_provincia_municipio_institucion(a:AdministradorDeReporte,q:str,c:str
     return a.claseModelo.objects.filter(provincia__nombre__icontains=provincia
                                            ,municipio__nombre__icontains=municipio)
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.dic_campo_metodo_filtrar['ProvinciaYMunicipio']=filtrar_provincia_municipio_institucion
-REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.dic_campo_metodo_filtrar['Producto']=lambda a,q,c:InstitucionProductiva.objects.filter(producto__in=Producto.objects.filter(nombre__icontains=q))
-REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.dic_campo_metodo_filtrar['TipoDeProducto']=lambda a,q,c:InstitucionProductiva.objects.filter(producto__in=Producto.objects.filter(tipoDeProducto__nombre__icontains=q))
+REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.dic_campo_metodo_filtrar['Producto']=lambda a,q,c:InstitucionProductiva.objects.filter(productos__in=Producto.objects.filter(nombre__icontains=q))
+REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.dic_campo_metodo_filtrar['TipoDeProducto']=lambda a,q,c:InstitucionProductiva.objects.filter(productos__in=Producto.objects.filter(tipoDeProducto__nombre__icontains=q))
 REPORTE_INSTITUCIONES_PRODUCTIVA_PDF.claseResource=InstitucionProductivaResource
 
 

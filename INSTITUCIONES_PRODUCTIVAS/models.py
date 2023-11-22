@@ -49,6 +49,24 @@ VALIDADOR_CAPACIDAD_PRODUCTOS=MinValueValidator(limit_value=1,message="La capaci
 
 #from djgeojson.fields import PointField
 
+
+class Producto(models.Model):
+    class Meta:
+        verbose_name = 'Producto'
+        verbose_name_plural = 'Productos'
+    nombre = models.CharField(max_length=255)
+    tipoDeProducto = models.ForeignKey(TipoDeProducto
+                                       , on_delete=models.CASCADE
+                                       ,verbose_name="Tipo")
+    # institucionProductiva = models.ForeignKey(InstitucionProductiva, on_delete=models.CASCADE)
+    Imagen = models.ImageField(upload_to='Productos', blank=True, null=True)
+    descripcion = models.TextField(verbose_name="Descripción", blank=True, null=True)
+
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return self.nombre
+
 class InstitucionProductiva(models.Model):
     class Meta:
         verbose_name = 'Institución Productiva'
@@ -81,6 +99,9 @@ class InstitucionProductiva(models.Model):
 
     TieneAlamacenConRefrigeracion=models.BooleanField(default=False
                                                       ,verbose_name="Tiene Refrigeración")
+
+    productos = models.ManyToManyField(Producto)
+
     # capacidadDeRefrigeracion = models.FloatField(
     #     verbose_name="Capacidad de refrigeración en KG",blank=True,null=True)
     descripcion = models.TextField(verbose_name="Descripción",blank=True,null=True)
@@ -97,22 +118,8 @@ class InstitucionProductiva(models.Model):
     def __str__(self):
         return self.Nombre
 
-class Producto(models.Model):
-    class Meta:
-        verbose_name = 'Producto'
-        verbose_name_plural = 'Productos'
-    nombre = models.CharField(max_length=255)
-    tipoDeProducto = models.ForeignKey(TipoDeProducto
-                                       , on_delete=models.CASCADE
-                                       ,verbose_name="Tipo")
-    institucionProductiva = models.ForeignKey(InstitucionProductiva, on_delete=models.CASCADE)
-    Imagen = models.ImageField(upload_to='Productos', blank=True, null=True)
-    descripcion = models.TextField(verbose_name="Descripción", blank=True, null=True)
 
-    created = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True)
-    def __str__(self):
-        return self.nombre
+#============================
 
 
 class InstitucionProductivaResource(resources.ModelResource):
@@ -142,8 +149,9 @@ class InstitucionProductivaResource(resources.ModelResource):
     @staticmethod
     @retornarBienDatoExportar
     def dehydrate_producto(instance):
-        if instance.producto_set is not None:
-            return "\n".join([z.nombre for z in instance.producto_set.all()])
+        #if instance.producto_set is not None:
+        if instance.productos is not None:
+            return "\n".join([z.nombre for z in instance.productos.all()])
         return ""
 
     @staticmethod

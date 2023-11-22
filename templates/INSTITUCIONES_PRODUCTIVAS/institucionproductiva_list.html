@@ -47,7 +47,7 @@
               </ul>
                 <p><b>Productos</b></p>
                 <ul>
-                {% for tecno in v.producto_set.all %}
+                {% for tecno in v.productos.all %}
                     <li><i class="bi bi-tag"></i> <span>{{tecno}}</span></li>
                     <li><i class="bi bi-dot"></i> <span>{{tecno.tipoDeProducto.nombre}}</span></li>
                     {% empty %}
