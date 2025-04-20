@@ -1,0 +1,26 @@
+Django==4.2.7
+django-jazzmin==2.6.0
+psycopg==3.1.14
+django-filter==23.5
+python-dotenv==1.0.0
+django-solo==2.1.0
+django-crum==0.7.9
+django-extensions==3.2.3
+psycopg2-binary==2.9.9; sys_platform == 'win32'
+Faker==20.1.0
+djangorestframework==3.14.0
+djangorestframework-simplejwt==5.3.1
+django-jazzmin==2.6.0
+python-dotenv==1.0.0
+drf-spectacular==0.27.0
+drf-spectacular-sidecar==2024.1.1
+django-cors-headers==4.6.0
+django-image-uploader-widget==0.2.5
+django-ckeditor==6.7.2
+django-nested-inline==0.4.6
+django-smart-selects==1.7.2
+django-import-export==3.2.0
+reportlab==4.2.0
+gunicorn
+
+
