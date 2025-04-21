@@ -16,10 +16,10 @@ from INSTITUCIONES_PRODUCTIVAS.models import (
 )
 
 # Rutas de las imágenes
-IMAGENES_BASE = 'media/seed_images/'
+IMAGENES_BASE = 'seed_images/'
 IMAGENES = {
-    'logo': os.path.join(IMAGENES_BASE, 'logo.png'),
-    'breadcrumbs': os.path.join(IMAGENES_BASE, 'breadcrumbs.png'),
+    'logo': os.path.join(IMAGENES_BASE, 'logo.PNG'),
+    'breadcrumbs': os.path.join(IMAGENES_BASE, 'breadcrumbs.jpg'),
     'fondo_principal': os.path.join(IMAGENES_BASE, 'fondo_principal.jpg'),
     'info_principal': os.path.join(IMAGENES_BASE, 'info_principal.jpg'),
     'quienes_somos': os.path.join(IMAGENES_BASE, 'quienes_somos.jpg'),
@@ -28,11 +28,22 @@ IMAGENES = {
     'especie': os.path.join(IMAGENES_BASE, 'especie.jpg'),
     'institucion_cientifica': os.path.join(IMAGENES_BASE, 'institucion_cientifica.jpg'),
     'institucion_productiva': os.path.join(IMAGENES_BASE, 'institucion_productiva.jpg'),
-    'producto': os.path.join(IMAGENES_BASE, 'producto.jpg'),
+    'producto': os.path.join(IMAGENES_BASE, 'producto.PNG'),
 }
+
+def verificar_imagenes():
+    """Verifica que todas las imágenes necesarias existan"""
+    print("Verificando imágenes...")
+    for nombre, ruta in IMAGENES.items():
+        if not os.path.exists(ruta):
+            print(f"⚠ Advertencia: No se encontró la imagen {ruta}")
+        else:
+            print(f"✓ Imagen encontrada: {ruta}")
 
 def crear_imagen(ruta):
     """Función auxiliar para crear objetos File de Django"""
+    if not os.path.exists(ruta):
+        raise FileNotFoundError(f"No se encontró la imagen: {ruta}")
     return File(open(ruta, 'rb'))
 
 def seed_configuracion():
@@ -47,8 +58,8 @@ def seed_configuracion():
         direccion="Calle Principal #123",
         horarios="Lunes a Viernes: 8:00 - 17:00"
     )
-    config.ImagenLogo.save('logo.png', crear_imagen(IMAGENES['logo']))
-    config.ImagenBreadcrumbs.save('breadcrumbs.png', crear_imagen(IMAGENES['breadcrumbs']))
+    config.ImagenLogo.save('logo.PNG', crear_imagen(IMAGENES['logo']))
+    config.ImagenBreadcrumbs.save('breadcrumbs.jpg', crear_imagen(IMAGENES['breadcrumbs']))
     config.save()
 
 def seed_pagina_principal():
@@ -61,7 +72,7 @@ def seed_pagina_principal():
     # Crear imágenes de fondo
     for i in range(3):
         fondo = ImagenesFondo_Principal.objects.create(Pagina=pagina)
-        fondo.Imagen.save(f'fondo_{i}.jpg', crear_imagen(IMAGENES['fondo_principal']))
+        fondo.Imagen.save(f'fondo_principal_{i}.jpg', crear_imagen(IMAGENES['fondo_principal']))
         fondo.save()
     
     # Crear informaciones principales
@@ -71,7 +82,7 @@ def seed_pagina_principal():
             Titulo=f"Información Principal {i+1}",
             Descripcion=f"Descripción de la información principal {i+1}"
         )
-        info.Imagen.save(f'info_{i}.jpg', crear_imagen(IMAGENES['info_principal']))
+        info.Imagen.save(f'info_principal_{i}.jpg', crear_imagen(IMAGENES['info_principal']))
         info.save()
 
 def seed_quienes_somos():
@@ -210,7 +221,7 @@ def seed_instituciones_productivas():
             **producto_data,
             tipoDeProducto=TipoDeProducto.objects.first()
         )
-        producto.Imagen.save(f'producto_{i}.jpg', crear_imagen(IMAGENES['producto']))
+        producto.Imagen.save(f'producto_{i}.PNG', crear_imagen(IMAGENES['producto']))
         producto.save()
     
     # Crear instituciones productivas
@@ -256,8 +267,11 @@ def run_seed():
     """Función principal para ejecutar todos los seeders"""
     print("Iniciando proceso de seed...")
     
+    # Verificar imágenes antes de comenzar
+    verificar_imagenes()
+    
     # Limpiar datos existentes
-    print("Limpiando datos existentes...")
+    print("\nLimpiando datos existentes...")
     ConfiguracionGeneral.objects.all().delete()
     PaginaPrincipal.objects.all().delete()
     QuienesSomos.objects.all().delete()
@@ -268,7 +282,7 @@ def run_seed():
     TipoDeProducto.objects.all().delete()
     
     # Crear nuevos datos
-    print("Creando nuevos datos...")
+    print("\nCreando nuevos datos...")
     seed_configuracion()
     seed_pagina_principal()
     seed_quienes_somos()
@@ -277,7 +291,7 @@ def run_seed():
     seed_instituciones_cientificas()
     seed_instituciones_productivas()
     
-    print("Proceso de seed completado exitosamente!")
+    print("\nProceso de seed completado exitosamente!")
 
 if __name__ == "__main__":
     run_seed() 

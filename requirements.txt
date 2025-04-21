@@ -22,5 +22,7 @@ django-smart-selects==1.7.2
 django-import-export==3.2.0
 reportlab==4.2.0
 gunicorn
+requests==2.31.0
+Pillow==10.1.0
 
 
